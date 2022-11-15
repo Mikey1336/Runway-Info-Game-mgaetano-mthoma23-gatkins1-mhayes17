@@ -22,6 +22,11 @@ int main(){
             cout << "Invalid input please try again... \n" << endl;
         }
     }
-    if choice
+    if (choice == "i"){
+        info();
+    }
+    if (choice == "p"){
+        game();
+    }
 };
 

@@ -5,7 +5,7 @@ using namespace std;
 // ---------> Main has been commented out because if you run it, it will conflict with the main in airport.cpp
 //            When it is uncommented it is a very basic structure for the game that can be improved.
 
-/*
+
 int game(){
 
     cout << "*** Welcome to the Landing Game! ***" << endl;
@@ -79,6 +79,6 @@ int game(){
         cout << "Oops! Wrong answer :(" << endl;
         cout << "The correct answer is " << correct << endl;
     }
-
+    return 0;
 }
-*/
+
