@@ -3,8 +3,34 @@
 #include <fstream>
 #include <iostream>
 #include <cmath>
+#include "game.cpp"
+
+#include <stdlib.h>
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <sys/time.h>
+#endif
+#include <time.h>
+
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
 
 // https://stackoverflow.com/questions/55431552/how-to-iterate-over-a-json-in-json-for-modern-c for code in iterating through the json
+
+GLdouble width, height;
+int wd;
+
+int game();
+
+void init();
+void initGL();
+void display();
+void kbd(unsigned char key, int x, int y);
+void kbdS(int key, int x, int y);
 
 using namespace std;
 
@@ -92,7 +118,145 @@ int main(int argc, char* argv[]) {
     }
 
     cout << "</table></div>" << endl;
-
+    game();
     return 0;
 }
 
+int game(){
+
+    cout << "*** Welcome to the Landing Game! ***" << endl;
+    cout << "** Based on the image above, choose the runway safest to land on! **" << endl;
+
+    //Random wind Direction
+    srand(time(NULL));
+    double windDirection = rand() % 360 +1;
+
+    //Random wind Speed
+    double windSpeed = rand() % 31;
+
+    cout << "Today's wind speed is: " << windSpeed << " mph" << endl;
+    cout << "Today's wind is coming from: " << windDirection << " degrees" << endl;
+
+    //Create Runways
+    Runway r13("r13", windSpeed , windDirection, 130);
+    Runway r31("r31", windSpeed, windDirection, 310);
+    Runway r9("r9", windSpeed, windDirection, 90);
+    Runway r27("r27", windSpeed, windDirection, 270);
+
+    if(r13.getHeadWind() < 0){
+        cout << r13.getName() << " - Tailwind: " << r13.getHeadWind() * -1 << " mph, Crosswind: "; (r13.getCrossWind() < 0) ? (cout << r13.getCrossWind() * -1 << " mph from left" << endl) : (cout << r13.getCrossWind() << " mph from right" << endl);
+    } else {
+        cout << r13.getName() << " - Headwind: " << r13.getHeadWind() << " mph, Crosswind: "; (r13.getCrossWind() < 0) ? (cout << r13.getCrossWind() * -1 << " mph from left" << endl) : (cout << r13.getCrossWind() << " mph from right" << endl);
+    }
+    if(r31.getHeadWind() < 0){
+        cout << r31.getName() << " - Tailwind: " << r31.getHeadWind() * -1 << " mph, Crosswind: "; (r31.getCrossWind() < 0) ? (cout << r31.getCrossWind() * -1 << " mph from left" << endl) : (cout << r31.getCrossWind() << " mph from right" << endl);
+    } else {
+        cout << r31.getName() << " - Headwind: " << r31.getHeadWind() << " mph, Crosswind: "; (r31.getCrossWind() < 0) ? (cout << r31.getCrossWind() * -1 << " mph from left" << endl) : (cout << r31.getCrossWind() << " mph from right" << endl);
+    }
+    if(r9.getHeadWind() < 0){
+        cout << r9.getName() << " - Tailwind: " << r9.getHeadWind() * -1 << " mph, Crosswind: "; (r9.getCrossWind() < 0) ? (cout << r9.getCrossWind() * -1 << " mph from left" << endl) : (cout << r9.getCrossWind() << " mph from right" << endl);
+    } else {
+        cout << r9.getName() << " - Headwind: " << r9.getHeadWind() << " mph, Crosswind: "; (r9.getCrossWind() < 0) ? (cout << r9.getCrossWind() * -1 << " mph from left" << endl) : (cout << r9.getCrossWind() << " mph from right" << endl);
+    }
+    if(r27.getHeadWind() < 0){
+        cout << r27.getName() << " - Tailwind: " << r27.getHeadWind() * -1 << " mph, Crosswind: "; (r27.getCrossWind() < 0) ? (cout << r27.getCrossWind() * -1 << " mph from left" << endl) : (cout << r27.getCrossWind() << " mph from right" << endl);
+    } else {
+        cout << r27.getName() << " - Headwind: " << r27.getHeadWind() << " mph, Crosswind: "; (r27.getCrossWind() < 0) ? (cout << r27.getCrossWind() * -1 << " mph from left" << endl) : (cout << r27.getCrossWind() << " mph from right" << endl);
+    }
+
+
+    cout << "r13: " << r13.getDirectionDiff() << endl;
+    cout << "r31: " << r31.getDirectionDiff() << endl;
+    cout << "r9: " << r9.getDirectionDiff() << endl;
+    cout << "r27: " << r27.getDirectionDiff() << endl;
+
+    vector<Runway> runways;
+    runways.push_back(r13);
+    runways.push_back(r31);
+    runways.push_back(r9);
+    runways.push_back(r27);
+
+    double lowestVal = abs(r13.getDirectionDiff());
+    string correct = "r13";
+    for (Runway r : runways){
+        if(abs(r.getDirectionDiff()) < lowestVal){
+            lowestVal = r.getDirectionDiff();
+            correct = r.getName();
+            r.setLanding(true);
+        }
+    }
+
+    cout << "* Based on the information, what runway would be optimal for landing? *"  << endl;
+    string ans;
+    cin >> ans;
+    if (ans == correct){
+        cout << "congrats!" << endl;
+    }
+    else{
+        cout << "Oops! Wrong answer :(" << endl;
+        cout << "The correct answer is " << correct << endl;
+    }
+
+
+        return 0;
+}
+void init() {
+    width = 600;
+    height = 600;
+
+}
+
+void initGL() {
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+}
+
+void display() {
+    // Tell OpenGL to use the whole window for drawing
+    glViewport(0, 0, width, height); // DO NOT CHANGE THIS LINE (unless you are running Catalina on Mac)
+
+    // Do an orthographic parallel projection with the coordinate
+    // system set to first quadrant, limited by screen/window size
+    glMatrixMode(GL_PROJECTION); // DO NOT CHANGE THIS LINE
+    glLoadIdentity(); // DO NOT CHANGE THIS LINE
+    glOrtho(0.0, width, height, 0.0, -1.f, 1.f); // DO NOT CHANGE THIS LINE
+
+    // Clear the color buffer with current clearing color
+    glClear(GL_COLOR_BUFFER_BIT); // DO NOT CHANGE THIS LINE
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // DO NOT CHANGE THIS LINE
+
+    /*
+     * Draw here
+    */
+
+
+    glVertex2d()
+
+}
+
+void kbd(unsigned char key, int x, int y) {
+
+    if (key == 27) {
+        glutDestroyWindow(wd);
+        exit(0);
+    }
+
+    glutPostRedisplay();
+
+}
+void kbdS(int key, int x, int y) {
+    switch(key) {
+        case GLUT_KEY_DOWN:
+            break;
+
+        case GLUT_KEY_UP:
+            break;
+
+        case GLUT_KEY_LEFT:
+            break;
+
+        case GLUT_KEY_RIGHT:
+            break;
+    }
+}
