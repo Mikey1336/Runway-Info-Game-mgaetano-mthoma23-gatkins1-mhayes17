@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int info() {
+void info() {
     // Create json file called AirportData.json
     ifstream airportFile("../airportData.json", ifstream::binary);
     Json::Reader reader;
@@ -93,6 +93,5 @@ int info() {
 
     cout << "</table></div>" << endl;
 
-    return 0;
 }
 

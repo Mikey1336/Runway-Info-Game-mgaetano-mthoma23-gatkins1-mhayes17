@@ -1,6 +1,4 @@
 #include <iostream>
-#include <iomanip>
-#include <fstream>
 #include "game.cpp"
 #include "airport.cpp"
 
@@ -15,7 +13,7 @@ int main(){
         cout << "If you would like to play the game press 'p' then enter, "
                 "if you would like to view runway information press 'i' then enter:  " << endl;
         cin >> choice;
-        if ((choice == "p") or (choice == 'i')){
+        if ((choice == "p") or (choice == "i")){
             validate = 1;
         }
         else{
@@ -26,7 +24,7 @@ int main(){
         info();
     }
     if (choice == "p"){
-        game();
+        play();
     }
     return 0;
 };
