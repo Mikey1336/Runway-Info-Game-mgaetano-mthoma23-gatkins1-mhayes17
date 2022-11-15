@@ -28,5 +28,6 @@ int main(){
     if (choice == "p"){
         game();
     }
+    return 0;
 };
 
