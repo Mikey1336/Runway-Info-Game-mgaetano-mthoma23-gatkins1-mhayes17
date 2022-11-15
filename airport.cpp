@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[]) {
+int info(int argc, char* argv[]) {
     // Create json file called AirportData.json
     ifstream airportFile("../airportData.json", ifstream::binary);
     Json::Reader reader;

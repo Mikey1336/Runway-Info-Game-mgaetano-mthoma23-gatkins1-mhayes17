@@ -6,7 +6,7 @@ using namespace std;
 //            When it is uncommented it is a very basic structure for the game that can be improved.
 
 /*
-int main(){
+int game(){
 
     cout << "*** Welcome to the Landing Game! ***" << endl;
     cout << "** Based on the image above, choose the runway safest to land on! **" << endl;

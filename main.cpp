@@ -1,6 +1,8 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include "game.cpp"
+#include "airport.cpp"
 
 using namespace std;
 
