@@ -15,7 +15,7 @@ struct point {
 //enum for switching through screens
 enum screensEnum{
     startScreen,
-    confettifyScreen,
+    runwaysScreen,
     endScreen,
     prestoNoButton,
     prestoButton

@@ -43,7 +43,7 @@ void display() {
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    // TODO: call the Button's draw method.
+    // Draw the two buttons
 
     game.draw(screen);
     info.draw(screen);
@@ -61,7 +61,7 @@ void kbd(unsigned char key, int x, int y) {
         exit(0);
     }
     if (key == 115){
-        screen = confettifyScreen;
+        screen = runwaysScreen;
         game.draw(screen);
         info.draw(screen);
     }
@@ -76,7 +76,7 @@ void kbdS(int key, int x, int y) {
 }
 
 void cursor(int x, int y) {
-    // TODO: If the Button is overlapping with the (x, y) coordinate passed in, call the hover method. Otherwise, call the release method.
+    // If either Button is overlapping with the (x, y) coordinate passed in, call the hover method. Otherwise, call the release method.
     //Game cursor listener
 
     if (game.isOverlapping(x, y)) {
@@ -98,7 +98,7 @@ void cursor(int x, int y) {
 // button will be GLUT_LEFT_BUTTON or GLUT_RIGHT_BUTTON
 // state will be GLUT_UP or GLUT_DOWN
 void mouse(int button, int state, int x, int y) {
-    // TODO: If the left button is down and the cursor is overlapping with the Button, call the pressDown method. Otherwise, call the release method.
+    //  If the left button is down and the cursor is overlapping with either Button, call the pressDown method. Otherwise, call the release method.
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && game.isOverlapping(x, y)) {
         game.pressDown();
     } else {
@@ -142,7 +142,7 @@ int main(int argc, char** argv) {
     glutInitWindowSize((int)width, (int)height);
     glutInitWindowPosition(100, 200); // Position the window's initial top-left corner
     /* create the window and store the handle to it */
-    wd = glutCreateWindow("Confettify!" /* title */ );
+    wd = glutCreateWindow("RUNWAYS!" /* title */ );
 
     // Register callback handler for window re-paint event
     glutDisplayFunc(display);

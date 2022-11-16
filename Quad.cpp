@@ -106,7 +106,7 @@ void Quad::draw(int screen) const {
                 glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString[i]);
             }
             //if enum == confettify screen, display confettify screen
-        } else if (screen == confettifyScreen) {
+        } else if (screen == runwaysScreen) {
             // Don't forget to set the color to the fill field
             // Set drawing color to fill color
             glColor3f(fill.red, fill.green, fill.blue);
@@ -137,7 +137,7 @@ void Quad::draw(int screen) const {
             if (screen == prestoNoButton) {
                 glColor3f(0.0f, 0.0f, 0.0f);
             } else {
-                screen = confettifyScreen;
+                screen = runwaysScreen;
                 draw(screen);
             }
 
