@@ -1,3 +1,4 @@
+/*
 #include "dist/json/json.h"
 #include "dist/jsoncpp.cpp"
 #include <fstream>
@@ -35,6 +36,7 @@ void kbdS(int key, int x, int y);
 using namespace std;
 
 int main(int argc, char* argv[]) {
+
     // Create json file called AirportData.json
     ifstream airportFile("../airportData.json", ifstream::binary);
     Json::Reader reader;
@@ -231,10 +233,10 @@ void display() {
     */
 
 
-    glVertex2d()
+    //glVertex2d()
 
-}
 
+/*
 void kbd(unsigned char key, int x, int y) {
 
     if (key == 27) {
@@ -260,3 +262,4 @@ void kbdS(int key, int x, int y) {
             break;
     }
 }
+ */

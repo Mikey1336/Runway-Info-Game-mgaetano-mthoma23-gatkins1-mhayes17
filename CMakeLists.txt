@@ -4,11 +4,11 @@ project(M4OEP_mgaetano_mthoma23_gatkins1_mhayes17)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(M4OEP_mgaetano_mthoma23_gatkins1_mhayes17
-        airport.cpp game.cpp Runway.cpp)
+        airport.cpp game.cpp Runway.cpp graphics.cpp Button.cpp Quad.cpp)
 
 if (WIN32)
     set(FREEGLUT_INCLUDE_DIRS "C:/Program\ Files/Common\ Files/freeglut/include")
-    set(FREEGLUT_LIBRARY_DIRS "C:/Program\ Files/Common\ Files/freeglut/lib")
+    set(FREEGLUT_LIBRARY_DIRS "C:/Program\ Files/Common\ Files/freeglut/lib/x64")
 endif (WIN32)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
@@ -31,7 +31,10 @@ file(GLOB SOURCE_FILES
         *.h
         )
 
+
 add_executable(graphics ${SOURCE_FILES})
+
+
 
 if (WIN32)
     target_link_libraries (graphics ${OPENGL_LIBRARIES} freeglut)
