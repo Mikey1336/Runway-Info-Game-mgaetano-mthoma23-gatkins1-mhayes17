@@ -8,7 +8,7 @@ using namespace std;
 GLdouble width, height;
 int wd;
 Button game({1, 0, 0}, {100, 100}, 100, 50, "Game");
-Button info({1, 0, 0}, {400, 100}, 100, 50, "Runway Finder");
+Button info({.133, .545, .133}, {400, 100}, 100, 50, "Runway Finder");
 
 
 int screen = startScreen;
