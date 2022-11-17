@@ -18,6 +18,7 @@ enum screensEnum{
     runwaysScreen,
     endScreen,
     gameScreen,
+    infoScreen,
     prestoNoButton,
     prestoButton,
 };
