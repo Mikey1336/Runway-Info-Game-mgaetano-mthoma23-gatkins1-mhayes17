@@ -8,13 +8,19 @@
 
 using namespace std;
 
-int main(int argc, char* argv[]) {
+int getRwyPoints() {
+    string icao;
+    cout << "Enter ICAO: ";
+    getline(cin, icao);
+
+    string command = "python ../api.py " + icao;
+    system(command.c_str());
+
     // Create json file called AirportData.json
     ifstream airportFile("../airportData.json", ifstream::binary);
     Json::Reader reader;
     Json::Value airport;
     reader.parse(airportFile, airport);
-    cout << "<div>" << airport["name"].asString() << "</div>" << endl;
 
     // Create json file called metarData.json
     ifstream weatherFile("../metarData.json", ifstream::binary);
@@ -22,76 +28,79 @@ int main(int argc, char* argv[]) {
     Json::Value weather;
     weatherReader.parse(weatherFile, weather);
 
-    // Print weather data for the given airport with formatting for html
-    cout << "<div><h2>" << airport["ident"].asString() << "</h2></div>" << endl;
-    cout << "<div><h1>" << airport["name"].asString() << "</h1></div>" << endl;
-    cout << "<div><h2>" << weather["meta"]["timestamp"].asString() << "</h2></div>" << endl;
-
     int windDirection = weather["wind_direction"]["value"].asInt();
     int windSpeed = weather["wind_speed"]["value"].asInt();
 
-    cout << "<div><p>" << "Wind direction: " << endl;
-    cout << windDirection << " degrees at " << windSpeed << " kts" << "</p></div>" << endl;
+    cout << "Wind is " << windDirection << " at " << windSpeed << endl;
 
-    cout << "<div><h1>" << "Runways: " << "</div></h1>" << endl;
-    cout << "<div><table>\n" << endl;
+    double latitude0 = stod(airport["runways"][0]["le_latitude_deg"].asString());
+    double longitude0 = stod(airport["runways"][0]["le_longitude_deg"].asString());
+
+    vector<vector<double>> rwyPoints;
 
     for (int i = 0; i < airport["runways"].size(); i++) {
         // Calculate the difference in angles between the plane's direction and the wind for strip 1
         Json::Value currentRwy = airport["runways"][i];
         string rwy1 = currentRwy["le_ident"].asString();
+        int rwyWidth = stoi(currentRwy["width_ft"].asString()) / 50;
+        int rwyLength = stoi(currentRwy["length_ft"].asString()) / 50;
+
         if (rwy1.size() == 3) {
             rwy1.resize(rwy1.size() - 1);
         }
         rwy1 += '0';
-        int rwy1Heading = stoi(rwy1);
-        int windAngle1 = windDirection - rwy1Heading;
+        int rwyHeading = stoi(rwy1);
 
-        // Calcualte headwinds and crosswinds for the first strip
-        double headwind1 = sin(windAngle1) * weather["wind_speed"]["value"].asInt();
-        double crosswind1 = abs(cos(windAngle1) * weather["wind_speed"]["value"].asInt());
+        cout << "Runway " << i + 1 << ": " << rwy1 << endl;
 
-        // Print all the info for the first strip
-        cout << "<tr><td>" << "Runway: " << currentRwy["le_ident"].asString() << "</td></tr>" << endl;
-        if (headwind1 >= 0) {
-            cout << "<tr><td>" << "Headwind: " << headwind1 << "</td></tr>" << endl;
-        } else {
-            cout << "<tr><td>" << "Tailwind: " << -headwind1 << "</td></tr>" << endl;
-        }
-        cout << "<tr><td>" << "Crosswind: " << crosswind1 << "</td></tr>" << endl;
-        cout << "<tr><td>" << "Heading detT: " << currentRwy["le_heading_degT"].asString() << "</td></tr>" << endl;
-        cout << "<tr><td>" << "Runway length: " << currentRwy["length_ft"].asString() << "</td></tr>" << endl;
-        cout << "<tr><td>" << "Runway width: " << currentRwy["width_ft"].asString() << "</td></tr>" << endl;
-        cout << "<tr><td>" << "Inverted runway: " << currentRwy["he_ident"].asString() << "</td></tr>" << endl;
+        cout << "Points: ";
 
-        // Calculate the difference in angles between the plane's direction and the wind for strip 2
-        string rwy2 = currentRwy["he_ident"].asString();
-        if (rwy2.size() == 3) {
-            rwy2.resize(rwy2.size() - 1);
-        }
-        rwy2 += '0';
-        int rwy2Heading = stoi(rwy2);
-        int windAngle2 = windDirection - rwy2Heading;
+        double originY = (stod(currentRwy["le_latitude_deg"].asString()) - latitude0) * 1000;
+        double originX = (stod(currentRwy["le_longitude_deg"].asString()) - longitude0) * 1000;
 
-        // Calcualte headwinds and crosswinds for the second strip
-        double headwind2 = sin(windAngle2) * windSpeed;
-        double crosswind2 = abs(cos(windAngle2) * windSpeed);
+        double p1x = originX - rwyWidth * cos(rwyHeading - 90);
+        double p1y = originY + rwyWidth * sin(rwyHeading - 90);
+        rwyPoints.push_back({p1x, p1y});
 
-        // Print all the info for the second strip
-        cout << "<tr><td>" << "Runway: " << currentRwy["he_ident"].asString() << "</td></tr>" << endl;
-        if (headwind2 >= 0) {
-            cout << "<tr><td>" << "Headwind: " << headwind2 << "</td></tr>" << endl;
-        } else {
-            cout << "<tr><td>" << "Tailwind: " << -headwind2 << "</td></tr>" << endl;
-        }
-        cout << "<tr><td>" << "Crosswind: " << crosswind2 << "</td></tr>" << endl;
-        cout << "<tr><td>" << "Heading detT: " << currentRwy["he_heading_degT"].asString() << "</td></tr>" << endl;
-        cout << "<tr><td>" << "Runway length: " << currentRwy["length_ft"].asString() << "</td></tr>" << endl;
-        cout << "<tr><td>" << "Runway width: " << currentRwy["width_ft"].asString() << "</td></tr>" << endl;
-        cout << "<tr><td>" << "Inverted runway: " << currentRwy["le_ident"].asString() << "</td></tr>" << endl;
+        rwyPoints.push_back({originX, originY});
+//        double p2x = originX;
+//        double p2y = originY;
+
+        rwyPoints.push_back({originX - rwyLength * sin(rwyHeading - 90), originY + rwyLength * cos(rwyHeading - 90)});
+//        double p3x = originX - rwyLength * sin(rwyHeading - 90);
+//        double p3y = originY + rwyLength * cos(rwyHeading - 90);
+
+        rwyPoints.push_back({p1x - rwyLength * sin(rwyHeading - 90), p1y + rwyLength * cos(rwyHeading - 90)});
+//        double p4x = p1x - rwyLength * sin(rwyHeading - 90);
+//        double p4y = p1y + rwyLength * cos(rwyHeading - 90);
+
+//        cout << p1x << ", " << p1y << endl;
+//        cout << p2x << ", " << p2y << endl;
+//        cout << p3x << ", " << p3y << endl;
+//        cout << p4x << ", " << p4y << endl;
+        cout << "Width: " << rwyWidth << endl;
+        cout << "Length: " << rwyLength << endl << endl;
     }
 
-    cout << "</table></div>" << endl;
+    double lowestX = 0, lowestY = 0;
+    for (int i = 0; i < rwyPoints.size(); i++) {
+        lowestX = min(rwyPoints[i][0], lowestX);
+        lowestY = min(rwyPoints[i][1], lowestY);
+        cout << rwyPoints[i][0] << ", " << rwyPoints[i][1] << endl;
+    }
+
+    for (int i = 0; i < rwyPoints.size(); i++) {
+        rwyPoints[i][0] -= lowestX;
+        rwyPoints[i][1] -= lowestY;
+        cout << rwyPoints[i][0] << ", " << rwyPoints[i][1] << endl;
+    }
+
+    for (int i = 0; i < rwyPoints.size(); i++) {
+        if (i % 4 == 0) {
+            cout << "Runway " << i / 4 + 1 << endl;
+        }
+        cout << rwyPoints[i][0] << ", " << rwyPoints[i][1] << endl;
+    }
 
     return 0;
 }
