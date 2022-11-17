@@ -66,6 +66,11 @@ void kbd(unsigned char key, int x, int y) {
         info.draw(screen);
     }
 
+    if (key == 116) {
+        screen = gameScreen;
+        game.draw(screen);
+    }
+
 
     
     glutPostRedisplay();

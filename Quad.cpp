@@ -2,6 +2,7 @@
 #include "graphics.h"
 #include <string>
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -105,7 +106,7 @@ void Quad::draw(int screen) const {
             for (i = 0; i < len; i++) {
                 glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString[i]);
             }
-            //if enum == confettify screen, display confettify screen
+            //if enum == runways screen, display runways screen
         } else if (screen == runwaysScreen) {
             // Don't forget to set the color to the fill field
             // Set drawing color to fill color
@@ -140,6 +141,34 @@ void Quad::draw(int screen) const {
                 screen = runwaysScreen;
                 draw(screen);
             }
+
+        }
+
+        else if (screen == gameScreen) {
+
+            glColor3d(198/255.0, 192/255.0, 107/255.0);
+
+            glBegin(GL_LINE_LOOP);
+            glVertex2f(100, 200);
+            glVertex2f(450, 200);
+            glVertex2f(450, 300);
+            glVertex2f(100, 300);
+            glEnd();
+
+
+//            x' = x*cos(t) - y*sin(t)
+//            y' = x*sin(t) + y*cos(t)
+            double angle = 0.698132;
+            glColor3d(1, 0, 0);
+            glBegin(GL_LINE_LOOP);
+            glVertex2f(500 - (100 * cos(angle) - 200 * sin(angle)) - 178, 500 - (100 * sin(angle) + 200 * cos(angle)) + 115);
+            glVertex2f(500 - (450 * cos(angle) - 200 * sin(angle)) - 178, 500 - (450 * sin(angle) + 200 * cos(angle)) + 115);
+            glVertex2f(500 - (450 * cos(angle) - 300 * sin(angle)) - 178, 500 - (450 * sin(angle) + 300 * cos(angle)) + 115);
+            glVertex2f(500 - (100 * cos(angle) - 300 * sin(angle)) - 178, 500 - (100 * sin(angle) + 300 * cos(angle)) + 115);
+            glEnd();
+
+
+
 
         }
 

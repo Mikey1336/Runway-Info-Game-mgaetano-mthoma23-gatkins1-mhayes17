@@ -17,8 +17,9 @@ enum screensEnum{
     startScreen,
     runwaysScreen,
     endScreen,
+    gameScreen,
     prestoNoButton,
-    prestoButton
+    prestoButton,
 };
 
 class Quad {
