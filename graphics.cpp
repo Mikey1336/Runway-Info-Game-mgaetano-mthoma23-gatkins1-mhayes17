@@ -66,10 +66,6 @@ void kbd(unsigned char key, int x, int y) {
         info.draw(screen);
     }
 
-    if (key == 116) {
-        screen = gameScreen;
-        game.draw(screen);
-    }
 
 
     
@@ -118,6 +114,8 @@ void mouse(int button, int state, int x, int y) {
 
 //If left button is up and cursor is over either one call matching function
     if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && game.isOverlapping(x, y)) {
+        screen = gameScreen;
+        game.draw(screen);
 
     }
 
