@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int getRwyPoints() {
+vector<vector<double>> getRwyPoints() {
     string icao;
     cout << "Enter ICAO: ";
     getline(cin, icao);
@@ -102,5 +102,5 @@ int getRwyPoints() {
         cout << rwyPoints[i][0] << ", " << rwyPoints[i][1] << endl;
     }
 
-    return 0;
+    return rwyPoints;
 }
