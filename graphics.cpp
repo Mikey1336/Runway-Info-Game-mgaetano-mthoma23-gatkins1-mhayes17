@@ -121,7 +121,8 @@ void mouse(int button, int state, int x, int y) {
 
 
     if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && info.isOverlapping(x, y)) {
-
+        screen = infoScreen;
+        info.draw(screen);
     }
     glutPostRedisplay();
 

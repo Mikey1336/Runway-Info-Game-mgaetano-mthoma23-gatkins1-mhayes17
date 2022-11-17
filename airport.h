@@ -9,10 +9,10 @@
 using namespace std;
 
 vector<vector<double>> getRwyPoints() {
-    string icao;
-    cout << "Enter ICAO: ";
-    getline(cin, icao);
-
+//    string icao;
+//    cout << "Enter ICAO: ";
+//    getline(cin, icao);
+    string icao = "KBTV";
     string command = "python ../api.py " + icao;
     system(command.c_str());
 

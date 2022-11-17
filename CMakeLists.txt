@@ -4,7 +4,7 @@ project(M4OEP_mgaetano_mthoma23_gatkins1_mhayes17)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(M4OEP_mgaetano_mthoma23_gatkins1_mhayes17
-        airport.cpp game.cpp Runway.cpp graphics.cpp Button.cpp Quad.cpp)
+        airport.h game.cpp Runway.cpp graphics.cpp Button.cpp Quad.cpp)
 
 if (WIN32)
     set(FREEGLUT_INCLUDE_DIRS "C:/Program\ Files/Common\ Files/freeglut/include")

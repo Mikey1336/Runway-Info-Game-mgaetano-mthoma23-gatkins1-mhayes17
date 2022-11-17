@@ -3,6 +3,9 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include "airport.h"
+#include <vector>
+
 
 using namespace std;
 
@@ -172,27 +175,20 @@ void Quad::draw(int screen) const {
 
         }
         else if (screen == infoScreen) {
-
             glColor3d(198/255.0, 192/255.0, 107/255.0);
 
             glBegin(GL_LINE_LOOP);
-            glVertex2f(100, 200);
-            glVertex2f(450, 200);
-            glVertex2f(450, 300);
-            glVertex2f(100, 300);
-            glEnd();
+
+            vector<vector<double>> points;
+            points = getRwyPoints();
+            for (int i = 0; i < points.size(); i++){
+                double x = points[i][0];
+                double y = points[i][1];
+                glVertex2f(x, y);
 
 
-//            x' = x*cos(t) - y*sin(t)
-//            y' = x*sin(t) + y*cos(t)
-            double angle = 0.698132;
-            glColor3d(1, 0, 0);
-            glBegin(GL_LINE_LOOP);
-            glVertex2f(500 - (100 * cos(angle) - 200 * sin(angle)) - 178, 500 - (100 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 200 * sin(angle)) - 178, 500 - (450 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 300 * sin(angle)) - 178, 500 - (450 * sin(angle) + 300 * cos(angle)) + 115);
-            glVertex2f(500 - (100 * cos(angle) - 300 * sin(angle)) - 178, 500 - (100 * sin(angle) + 300 * cos(angle)) + 115);
-            glEnd();
+
+            }
 
 
 
