@@ -12,7 +12,7 @@ private:
 public:
     Button(color fill, point center, unsigned int width, unsigned int height, std::string label);
     /* Uses OpenGL to draw the box with the label on top */
-    virtual void draw(int screen) const override;
+    virtual void draw(int screen)const override;
 
     /* Returns true if the coordinate is inside the box */
     bool isOverlapping(int x, int y) const;

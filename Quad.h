@@ -29,6 +29,7 @@ protected:
     point center;
     unsigned int width;
     unsigned int height;
+    int selectedRunway;
 
 public:
     Quad();
@@ -54,6 +55,9 @@ public:
     void setColor(color fill);
     void move(int deltaX, int deltaY);
     void resize(unsigned int width, unsigned int height);
+
+    void setRunway(int newRunway);
+    int getRunway() const;
 
     virtual void draw(int screen) const;
 };

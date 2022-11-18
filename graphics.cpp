@@ -13,8 +13,6 @@ Button info({.133, .545, .133}, {400, 100}, 100, 50, "Runway Finder");
 
 int screen = startScreen;
 
-
-
 void init() {
     width = 500;
     height = 500;
@@ -65,14 +63,35 @@ void kbd(unsigned char key, int x, int y) {
         game.draw(screen);
         info.draw(screen);
     }
-
-
-
     
     glutPostRedisplay();
 }
 
 void kbdS(int key, int x, int y) {
+
+    switch(key) {
+
+        case GLUT_KEY_RIGHT:
+            screen = gameScreen;
+            game.setRunway(2);
+            game.draw(screen);
+            break;
+        case GLUT_KEY_UP:
+            screen = gameScreen;
+            game.setRunway(1);
+            game.draw(screen);
+            break;
+        case GLUT_KEY_LEFT:
+            screen = gameScreen;
+            game.setRunway(0);
+            game.draw(screen);
+            break;
+        case GLUT_KEY_DOWN:
+            screen = gameScreen;
+            game.setRunway(3);
+            game.draw(screen);
+            break;
+    }
 
 }
 
@@ -115,10 +134,10 @@ void mouse(int button, int state, int x, int y) {
 //If left button is up and cursor is over either one call matching function
     if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && game.isOverlapping(x, y)) {
         screen = gameScreen;
+        game.setRunway(0);
         game.draw(screen);
 
     }
-
 
     if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && info.isOverlapping(x, y)) {
         screen = infoScreen;
