@@ -184,7 +184,6 @@ void Quad::draw(int screen) const {
             for (int i = 0; i < points.size(); i++){
                 double x = points[i][0];
                 double y = points[i][1];
-                glVertex2f(x, y);
 
 
 
