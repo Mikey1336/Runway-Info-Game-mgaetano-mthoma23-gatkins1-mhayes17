@@ -342,6 +342,7 @@ void Quad::draw(int screen) const {
             double y = points[i][1];
 
 
+
         }
 
 
