@@ -83,7 +83,7 @@ void kbdS(int key, int x, int y) {
             break;
         case GLUT_KEY_LEFT:
             screen = gameScreen;
-            game.setRunway(0);
+            game.setRunway(4);
             game.draw(screen);
             break;
         case GLUT_KEY_DOWN:
@@ -133,8 +133,7 @@ void mouse(int button, int state, int x, int y) {
 
 //If left button is up and cursor is over either one call matching function
     if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && game.isOverlapping(x, y)) {
-        screen = gameScreen;
-        game.setRunway(0);
+        screen = gameStart;
         game.draw(screen);
 
     }
