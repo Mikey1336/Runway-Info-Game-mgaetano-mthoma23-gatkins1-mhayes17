@@ -42,7 +42,7 @@ vector<vector<double>> getRwyPoints() {
         // Calculate the difference in angles between the plane's direction and the wind for strip 1
         Json::Value currentRwy = airport["runways"][i];
         string rwy1 = currentRwy["le_ident"].asString();
-        int rwyWidth = stoi(currentRwy["width_ft"].asString()) / 50;
+        int rwyWidth = stoi(currentRwy["width_ft"].asString()) / 10;
         int rwyLength = stoi(currentRwy["length_ft"].asString()) / 50;
 
         if (rwy1.size() == 3) {
