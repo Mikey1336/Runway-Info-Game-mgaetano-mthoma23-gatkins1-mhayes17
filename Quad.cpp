@@ -1,5 +1,6 @@
 #include "Quad.h"
 #include "graphics.h"
+#include "runway.h"
 #include <string>
 #include <iostream>
 #include <cmath>
@@ -158,23 +159,26 @@ void Quad::draw(int screen) const {
         glColor3f(0, 0, 1);
         string displayString1 = "WIND IS COMING FROM SOME DIRECTION AT SOME SPEED";
         string displayString2 = "USE THE ARROW KEYS TO CHOOSE THE CORRECT RUNWAY TO LAND ON";
-        glRasterPos2f(90, 100);
+        glRasterPos2f(80, 100);
         int len1 = displayString1.length();
-        string lenString1;
         int i;
         for (i = 0; i < len1; i++) {
             glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString1[i]);
         }
 
-        glRasterPos2f(90, 120);
-        int len2 = displayString1.length();
-        string lenString2;
-        for (i = 0; i < len1; i++) {
+        glRasterPos2f(40, 120);
+        int len2 = displayString2.length();
+        for (i = 0; i < len2; i++) {
             glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString2[i]);
         }
     }
 
     else if (screen == gameScreen) {
+
+        string runwayUp = "RUNWAY 13";
+        string runwayLeft = "RUNWAY 9";
+        string runwayDown = "RUNWAY 31";
+        string runwayRight = "RUNWAY 27";
 
         if (getRunway() == 1) {
 
@@ -215,6 +219,33 @@ void Quad::draw(int screen) const {
             glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339 + 16.0696902422
                     , 135 + 48.2090707265 + 19.151111078);
             glEnd();
+
+            glColor3f(0, 1, 0);
+            glRasterPos2f(80, 100);
+            int lenUp = runwayUp.length();
+            int i;
+            for (i = 0; i < lenUp; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayUp[i]);
+            }
+            glColor3f(1, 0, 0);
+            glRasterPos2f(25, 240);
+            int lenLeft = runwayLeft.length();
+            for (i = 0; i < lenLeft; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayLeft[i]);
+            }
+            glColor3f(1, 0, 0);
+            glRasterPos2f(265, 400);
+            int lenDown = runwayDown.length();
+            for (i = 0; i < lenDown; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayDown[i]);
+            }
+            glColor3f(1, 0, 0);
+            glRasterPos2f(400, 180);
+            int lenRight = runwayRight.length();
+            for (i = 0; i < lenRight; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayRight[i]);
+            }
+
         }
         else if (getRunway() == 2) {
 
@@ -252,6 +283,32 @@ void Quad::draw(int screen) const {
             glVertex2f(350, 270);
             glVertex2f(325, 250);
             glEnd();
+
+            glColor3f(1, 0, 0);
+            glRasterPos2f(80, 100);
+            int lenUp = runwayUp.length();
+            int i;
+            for (i = 0; i < lenUp; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayUp[i]);
+            }
+            glColor3f(1, 0, 0);
+            glRasterPos2f(25, 240);
+            int lenLeft = runwayLeft.length();
+            for (i = 0; i < lenLeft; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayLeft[i]);
+            }
+            glColor3f(1, 0, 0);
+            glRasterPos2f(265, 400);
+            int lenDown = runwayDown.length();
+            for (i = 0; i < lenDown; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayDown[i]);
+            }
+            glColor3f(0, 1, 0);
+            glRasterPos2f(400, 180);
+            int lenRight = runwayRight.length();
+            for (i = 0; i < lenRight; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayRight[i]);
+            }
         } else if (getRunway() == 3) {
 
             glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
@@ -291,9 +348,33 @@ void Quad::draw(int screen) const {
             glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339 - 16.0696902422
                     ,342 - 48.2090707265 - 19.151111078);
             glEnd();
-        }
 
-        else if (getRunway() == 4) {
+            glColor3f(1, 0, 0);
+            glRasterPos2f(80, 100);
+            int lenUp = runwayUp.length();
+            int i;
+            for (i = 0; i < lenUp; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayUp[i]);
+            }
+            glColor3f(1, 0, 0);
+            glRasterPos2f(25, 240);
+            int lenLeft = runwayLeft.length();
+            for (i = 0; i < lenLeft; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayLeft[i]);
+            }
+            glColor3f(0, 1, 0);
+            glRasterPos2f(265, 400);
+            int lenDown = runwayDown.length();
+            for (i = 0; i < lenDown; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayDown[i]);
+            }
+            glColor3f(1, 0, 0);
+            glRasterPos2f(400, 180);
+            int lenRight = runwayRight.length();
+            for (i = 0; i < lenRight; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayRight[i]);
+            }
+        } else if (getRunway() == 4) {
 
             glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
 
@@ -329,8 +410,62 @@ void Quad::draw(int screen) const {
             glVertex2f(200, 270);
             glVertex2f(230, 250);
             glEnd();
+
+            glColor3f(1, 0, 0);
+            glRasterPos2f(80, 100);
+            int lenUp = runwayUp.length();
+            int i;
+            for (i = 0; i < lenUp; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayUp[i]);
+            }
+            glColor3f(0, 1, 0);
+            glRasterPos2f(25, 240);
+            int lenLeft = runwayLeft.length();
+            for (i = 0; i < lenLeft; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayLeft[i]);
+            }
+            glColor3f(1, 0, 0);
+            glRasterPos2f(265, 400);
+            int lenDown = runwayDown.length();
+            for (i = 0; i < lenDown; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayDown[i]);
+            }
+            glColor3f(1, 0, 0);
+            glRasterPos2f(400, 180);
+            int lenRight = runwayRight.length();
+            for (i = 0; i < lenRight; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayRight[i]);
+            }
         }
-    } else if (screen == infoScreen) {
+    } else if (screen == gameEnd) {
+        srand(time(NULL));
+        double windDirection = rand() % 360 + 1;
+        //Random wind Speed
+        double windSpeed = rand() % 31;
+        //Create Runways
+        Runway r13("r13", windSpeed , windDirection, 130);
+        Runway r31("r31", windSpeed, windDirection, 310);
+        Runway r9("r9", windSpeed, windDirection, 90);
+        Runway r27("r27", windSpeed, windDirection, 270);
+
+        vector<Runway> runways;
+        runways.push_back(r13);
+        runways.push_back(r31);
+        runways.push_back(r9);
+        runways.push_back(r27);
+        double lowestVal = abs(r13.getDirectionDiff());
+        string correct;
+        for (Runway r : runways){
+            if(abs(r.getDirectionDiff()) < lowestVal){
+                lowestVal = r.getDirectionDiff();
+                correct = r.getName();
+                r.setLanding(true);
+            }
+        }
+    }
+
+
+    else if (screen == infoScreen) {
         glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
 
         glBegin(GL_LINE_LOOP);

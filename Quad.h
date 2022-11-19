@@ -19,6 +19,7 @@ enum screensEnum{
     endScreen,
     gameScreen,
     gameStart,
+    gameEnd,
     infoScreen,
     prestoNoButton,
     prestoButton,

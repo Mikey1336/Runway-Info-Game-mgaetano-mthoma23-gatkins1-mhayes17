@@ -58,6 +58,10 @@ void kbd(unsigned char key, int x, int y) {
         glutDestroyWindow(wd);
         exit(0);
     }
+
+    if (key == 10 && screen == gameScreen) {
+
+    }
     if (key == 115){
         screen = runwaysScreen;
         game.draw(screen);
