@@ -8,11 +8,23 @@
 
 using namespace std;
 
-vector<vector<double>> getRwyPoints() {
-    string icao;
-    cout << "Enter ICAO: ";
-    getline(cin, icao);
+struct point2D {
+    double x;
+    double y;
 
+    /* Constructors */
+    point2D();
+    point2D(double x, double y);
+
+    /* Overloaded Operator */
+    friend std::ostream& operator << (std::ostream& outs, const point2D &p);
+};
+
+vector<vector<double>> getRwyPoints() {
+//    string icao;
+//    cout << "Enter ICAO: ";
+//    getline(cin, icao);
+    string icao = "KBTV";
     string command = "python ../api.py " + icao;
     system(command.c_str());
 
