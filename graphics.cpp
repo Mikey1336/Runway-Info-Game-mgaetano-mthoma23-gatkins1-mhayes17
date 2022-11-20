@@ -174,7 +174,7 @@ void display() {
         case gameScreen: {
             //draw first runway
             glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
-            glBegin(GL_LINE_LOOP);
+            glBegin(GL_QUADS);
             glVertex2f(100, 200);
             glVertex2f(450, 200);
             glVertex2f(450, 300);
@@ -182,8 +182,7 @@ void display() {
             glEnd();
             //draw second runway
             double angle = 0.698132;
-            glColor3d(1, 0, 0);
-            glBegin(GL_LINE_LOOP);
+            glBegin(GL_QUADS);
             glVertex2f(500 - (100 * cos(angle) - 200 * sin(angle)) - 178,
                        500 - (100 * sin(angle) + 200 * cos(angle)) + 115);
             glVertex2f(500 - (450 * cos(angle) - 200 * sin(angle)) - 178,
@@ -193,6 +192,59 @@ void display() {
             glVertex2f(500 - (100 * cos(angle) - 300 * sin(angle)) - 178,
                        500 - (100 * sin(angle) + 300 * cos(angle)) + 115);
             glEnd();
+
+            glColor3d(0, 0, 0);
+            glBegin(GL_LINES);
+            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)), 135);
+            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339, 135 + 48.2090707265);
+            glEnd();
+
+            glBegin(GL_TRIANGLE_STRIP);
+            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339 + 12.8557521937
+                    , 135 + 48.2090707265 - 15.3208888624);
+            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339 - 12.8557521937
+                    , 135 + 48.2090707265 + 15.3208888624);
+            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339 + 16.0696902422
+                    , 135 + 48.2090707265 + 19.151111078);
+            glEnd();
+
+            glBegin(GL_LINES);
+            glVertex2f(425, 250);
+            glVertex2f(350, 250);
+            glEnd();
+
+            glBegin(GL_TRIANGLE_STRIP);
+            glVertex2f(350, 230);
+            glVertex2f(350, 270);
+            glVertex2f(325, 250);
+            glEnd();
+
+            glBegin(GL_LINES);
+            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)), 342);
+            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339, 342 - 48.2090707265);
+            glEnd();
+
+            glBegin(GL_TRIANGLE_STRIP);
+            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339 + 12.8557521937
+                    ,342 - 48.2090707265 - 15.3208888624);
+            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339 - 12.8557521937
+                    ,342 - 48.2090707265 + 15.3208888624);
+            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339 - 16.0696902422
+                    ,342 - 48.2090707265 - 19.151111078);
+            glEnd();
+
+            glBegin(GL_LINES);
+            glVertex2f(125, 250);
+            glVertex2f(200, 250);
+            glEnd();
+
+            glBegin(GL_TRIANGLE_STRIP);
+            glVertex2f(200, 230);
+            glVertex2f(200, 270);
+            glVertex2f(230, 250);
+            glEnd();
+
+
             //draw buttons to select runway
             br9.draw(screen);
             br27.draw(screen);
