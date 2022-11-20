@@ -160,6 +160,14 @@ void display() {
             for (i = 0; i < len; i++) {
                 glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString[i]);
             }
+            string displayString2 = "PRESS 's' TO RETURN TO MENU";
+            glRasterPos2f(130, 300);
+            int len2 = displayString.length();
+            string lenString2;
+            int m;
+            for (m = 0; m < len2; m++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString[i]);
+            }
             break;
         }
 
