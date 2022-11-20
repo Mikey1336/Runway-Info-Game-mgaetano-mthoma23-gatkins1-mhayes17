@@ -15,7 +15,7 @@ int wd;
 Button game({1, 0, 0}, {100, 100}, 100, 50, "Game");
 Button info({.133, .545, .133}, {400, 100}, 100, 50, "Runway Finder");
 //Buttons for gameScreen
-Button play({.1, .6, .1}, {400, 100}, 100, 50, "Play!");
+Button play({.1, .6, .1}, {300, 50}, 100, 50, "Play!");
 Button br9({.3, .3, .3}, {85, 250}, 100, 50, "r9");
 Button br27({.3, .3, .3}, {465, 250}, 100, 50, "r27");
 Button br31({.3, .3, .3}, {450, 380}, 100, 50, "r31");
@@ -367,9 +367,9 @@ void mouse(int button, int state, int x, int y) {
 
     //Mouse Listeners for the game
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && play.isOverlapping(x, y)) {
-        info.pressDown();
+        play.pressDown();
     } else {
-        info.release();
+        play.release();
     }
 
     //ONCE PLAY BUTTON HAS BEEN CLICKED RUN GAME FUNCTION
