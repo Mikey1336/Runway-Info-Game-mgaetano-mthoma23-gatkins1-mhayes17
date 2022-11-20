@@ -51,11 +51,12 @@ vector<vector<double>> getRwyPoints() {
     vector<vector<double>> rwyPoints;
 
     for (int i = 0; i < airport["runways"].size(); i++) {
+//    for (int i = 0; i < 1; i++) {
         // Calculate the difference in angles between the plane's direction and the wind for strip 1
         Json::Value currentRwy = airport["runways"][i];
         string rwy1 = currentRwy["le_ident"].asString();
         int rwyWidth = stoi(currentRwy["width_ft"].asString()) / 10;
-        int rwyLength = stoi(currentRwy["length_ft"].asString()) / 50;
+        int rwyLength = stoi(currentRwy["length_ft"].asString()) / 40;
 
         if (rwy1.size() == 3) {
             rwy1.resize(rwy1.size() - 1);
@@ -67,22 +68,51 @@ vector<vector<double>> getRwyPoints() {
 
         cout << "Points: ";
 
-        double originY = (stod(currentRwy["le_latitude_deg"].asString()) - latitude0) * 1000;
-        double originX = (stod(currentRwy["le_longitude_deg"].asString()) - longitude0) * 1000;
-
-        double p1x = originX - rwyWidth * cos(rwyHeading - 90);
-        double p1y = originY + rwyWidth * sin(rwyHeading - 90);
-        rwyPoints.push_back({p1x, p1y});
-
+        double originY = (stod(currentRwy["le_latitude_deg"].asString())) * 3000;
+        double originX = (stod(currentRwy["le_longitude_deg"].asString())) * 3000;
         rwyPoints.push_back({originX, originY});
+
+        double x, y;
+        double degToRad = M_PI / 180;
+
+        if (rwyHeading / 90 % 2 == 0) {
+            x = originX + rwyWidth * cos((rwyHeading % 90) * degToRad);
+            y = originY + rwyWidth * sin((rwyHeading % 90) * degToRad);
+            rwyPoints.push_back({x, y});
+
+            x = x + rwyLength * sin((rwyHeading % 90) * degToRad);
+            y = y - rwyLength * cos((rwyHeading % 90) * degToRad);
+            rwyPoints.push_back({x, y});
+
+            x = originX + rwyLength * sin((rwyHeading % 90) * degToRad);
+            y = originY - rwyLength * cos((rwyHeading % 90) * degToRad);
+            rwyPoints.push_back({x, y});
+        } else {
+            x = originX - rwyWidth * sin((rwyHeading % 90) * degToRad);
+            y = originY + rwyWidth * cos((rwyHeading % 90) * degToRad);
+            rwyPoints.push_back({x, y});
+
+            x = x + rwyLength * cos((rwyHeading % 90) * degToRad);
+            y = y + rwyLength * sin((rwyHeading % 90) * degToRad);
+            rwyPoints.push_back({x, y});
+
+            x = originX + rwyLength * cos((rwyHeading % 90) * degToRad);
+            y = originY + rwyLength * sin((rwyHeading % 90) * degToRad);
+            rwyPoints.push_back({x, y});
+        }
+
+//        double p1x = originX - rwyWidth * cos(rwyHeading - 90);
+//        double p1y = originY + rwyWidth * sin(rwyHeading - 90);
+//        rwyPoints.push_back({p1x, p1y});
+
 //        double p2x = originX;
 //        double p2y = originY;
 
-        rwyPoints.push_back({originX - rwyLength * sin(rwyHeading - 90), originY + rwyLength * cos(rwyHeading - 90)});
+//        rwyPoints.push_back({originX - rwyLength * sin(rwyHeading - 90), originY + rwyLength * cos(rwyHeading - 90)});
 //        double p3x = originX - rwyLength * sin(rwyHeading - 90);
 //        double p3y = originY + rwyLength * cos(rwyHeading - 90);
 
-        rwyPoints.push_back({p1x - rwyLength * sin(rwyHeading - 90), p1y + rwyLength * cos(rwyHeading - 90)});
+//        rwyPoints.push_back({p1x - rwyLength * sin(rwyHeading - 90), p1y + rwyLength * cos(rwyHeading - 90)});
 //        double p4x = p1x - rwyLength * sin(rwyHeading - 90);
 //        double p4y = p1y + rwyLength * cos(rwyHeading - 90);
 
@@ -94,7 +124,7 @@ vector<vector<double>> getRwyPoints() {
         cout << "Length: " << rwyLength << endl << endl;
     }
 
-    double lowestX = 0, lowestY = 0;
+    double lowestX = rwyPoints[0][0], lowestY = rwyPoints[0][1];
     for (int i = 0; i < rwyPoints.size(); i++) {
         lowestX = min(rwyPoints[i][0], lowestX);
         lowestY = min(rwyPoints[i][1], lowestY);
