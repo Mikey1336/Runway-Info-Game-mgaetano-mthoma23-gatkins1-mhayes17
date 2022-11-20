@@ -9,7 +9,7 @@ def getAirportData():
     tokens = fileIn.read().split("\n")
     fileIn.close()
 
-    id = argv[1]
+    id = "KBTV"
     # id = input("Enter airport icao: ")
     # id = id.strip().upper()[0:4]
 
