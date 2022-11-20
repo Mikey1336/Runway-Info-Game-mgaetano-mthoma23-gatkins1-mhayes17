@@ -204,19 +204,8 @@ void display() {
 
         //when info screen is clicked
         case infoScreen: {
-            /*
-            glColor3d(198/255.0, 192/255.0, 107/255.0);
 
-            glBegin(GL_LINE_LOOP);
-
-            vector<vector<double>> points;
-            points = getRwyPoints();
-            for (int i = 0; i < points.size(); i++) {
-                double x = points[i][0];
-                double y = points[i][1];
-
-            }
-            */
+           cout << "nice" << endl;
             break;
         }
 
@@ -391,24 +380,24 @@ void mouse(int button, int state, int x, int y) {
     }
     //Listeners for runway buttons
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && br9.isOverlapping(x, y)) {
-        info.pressDown();
+        game.pressDown();
     } else {
-        info.release();
+        game.release();
     }
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && br27.isOverlapping(x, y)) {
-        info.pressDown();
+        game.pressDown();
     } else {
-        info.release();
+        game.release();
     }
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && br13.isOverlapping(x, y)) {
-        info.pressDown();
+        game.pressDown();
     } else {
-        info.release();
+        game.release();
     }
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && br31.isOverlapping(x, y)) {
-        info.pressDown();
+        game.pressDown();
     } else {
-        info.release();
+        game.release();
     }
     //if the correct button is clicked print winner and go to end screen
     if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && br9.isOverlapping(x,y) && ans == br9.getLabel()){
