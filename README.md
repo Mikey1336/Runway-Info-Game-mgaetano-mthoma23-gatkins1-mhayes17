@@ -16,27 +16,27 @@ are displayed along with 5 buttons; 4 representing each runway and 1 play button
 is what calls the game function and then outputs the runway statistics to the console, it is then up to the 
 user to click the button for the runway with the safest landing conditions.  
 
-Module 4 concepts:
--Used OpenGL and GLUT frameworks 
--Drawing to draw buttons and runways
--Keyboard Listener to enter program from start
--Mouse listeners to select menu options and game choices
--Button and Quad classes included
+Module 4 concepts:\
+-Used OpenGL and GLUT frameworks\
+-Drawing to draw buttons and runways\
+-Keyboard Listener to enter program from start\
+-Mouse listeners to select menu options and game choices\
+-Button and Quad classes included\
 -Timer 
 
-Future Additions:
+Future Additions:\
 This program has lots of possibilities for future improvements.  The first option for improvements would be
 just an overall graphics and visual improvement such as background images and more aesthetically pleasing color 
 selections.  Another idea would be to make the game a little more complicated and harder such as having to land 
 an image of a plane on the correct runway.
 
-Grade:
-Main Program (40 pts)
-Keyboard listener for start screen (10 pts)
-Mouse listener for runways screen (10 pts)
-Mouse listener for game screen (10 pts)
-Quad class (10 pts)
-Button class (10 pts)
-Runway class (10 pts)
-Airport class (10 pts)
+Grade:\
+Main Program (40 pts)\
+Keyboard listener for start screen (10 pts)\
+Mouse listener for runways screen (10 pts)\
+Mouse listener for game screen (10 pts)\
+Quad class (10 pts)\
+Button class (10 pts)\
+Runway class (10 pts)\
+Airport class (10 pts)\
 ~110 pts
