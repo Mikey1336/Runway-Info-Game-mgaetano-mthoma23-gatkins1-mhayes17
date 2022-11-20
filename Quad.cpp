@@ -333,18 +333,18 @@ void Quad::draw(int screen) const {
     } else if (screen == infoScreen) {
         glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
 
-        glBegin(GL_LINE_LOOP);
-
         vector<vector<double>> points;
         points = getRwyPoints();
+
+        glBegin(GL_QUADS);
+
         for (int i = 0; i < points.size(); i++) {
             double x = points[i][0];
             double y = points[i][1];
 
-
-
+            glVertex2f(x, y);
         }
 
-
+        glEnd();
     }
 }
