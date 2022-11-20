@@ -105,54 +105,55 @@ int Quad::getRunway() const {
 }
 
 void Quad::draw(int screen) const {
-    //if enum == start screen, display start screen
-    if (screen == startScreen) {
-        glBindTexture(GL_TEXTURE_2D, 0);
-        glColor3f(0, 0, 1);
-        string displayString = "PRESS 's' TO ENTER RUNWAY EDUCATION PROGRAM";
-        glRasterPos2f(130, 100);
-        int len = displayString.length();
-        string lenString;
-        int i;
+    // Don't forget to set the color to the fill field
+    // Set drawing color to fill color
+    glColor3f(fill.red, fill.green, fill.blue);
+    // Draw building as quad
+    glBegin(GL_QUADS);
 
-        for (i = 0; i < len; i++) {
-            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString[i]);
-        }
-        //if enum == runways screen, display runways screen
-    } else if (screen == runwaysScreen) {
-        // Don't forget to set the color to the fill field
-        // Set drawing color to fill color
-        glColor3f(fill.red, fill.green, fill.blue);
-        // Draw rectangle
-        glBegin(GL_QUADS);
-        // Draw center point
-        glVertex2i(getLeftX(), getTopY());
-        glVertex2i(getLeftX(), getBottomY());
-        glVertex2i(getRightX(), getBottomY());
-        glVertex2i(getRightX(), getTopY());
-        // End quad
-        glEnd();
+    // Draw points of vertices
+    glVertex2i(center.x- (width/2), center.y - (height/2));
+    glVertex2i(center.x + (width/2), center.y - (height/2));
+    glVertex2i(center.x + (width/2), center.y + (height/2));
+    glVertex2i(center.x - (width/2), center.y + (height/2));
+
+    // End Quad
+    glEnd();
+    /*
+        if (screen == runwaysScreen) {
+            // Don't forget to set the color to the fill field
+            // Set drawing color to fill color
+            glColor3f(fill.red, fill.green, fill.blue);
+            // Draw rectangle
+            glBegin(GL_QUADS);
+            // Draw center point
+            glVertex2i(getLeftX(), getTopY());
+            glVertex2i(getLeftX(), getBottomY());
+            glVertex2i(getRightX(), getBottomY());
+            glVertex2i(getRightX(), getTopY());
+            // End quad
+            glEnd();
         //if enum == end screen, display end screen
-    } else if (screen == endScreen) {
-        glBindTexture(GL_TEXTURE_2D, 0);
-        glColor3f(0, 0, 1);
-        string displayString = "YOU HAVE COMPLETED THE GAME. CONGRATULATIONS";
-        glRasterPos2f(90, 100);
-        int len = displayString.length();
-        string lenString;
-        int i;
-        for (i = 0; i < len; i++) {
-            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString[i]);
-        }
-        //if enum == presto no button, remove the button
-        //if enum == presto button, set enum to confettify screen and draw again.
-    } else if (screen == prestoNoButton || screen == prestoButton) {
-        if (screen == prestoNoButton) {
-            glColor3f(0.0f, 0.0f, 0.0f);
-        } else {
-            screen = runwaysScreen;
-            draw(screen);
-        }
+        } else if (screen == endScreen) {
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glColor3f(0, 0, 1);
+            string displayString = "YOU HAVE COMPLETED THE GAME. CONGRATULATIONS";
+            glRasterPos2f(90, 100);
+            int len = displayString.length();
+            string lenString;
+            int i;
+            for (i = 0; i < len; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString[i]);
+            }
+            //if enum == presto no button, remove the button
+            //if enum == presto button, set enum to confettify screen and draw again.
+        } else if (screen == prestoNoButton || screen == prestoButton) {
+            if (screen == prestoNoButton) {
+                glColor3f(0.0f, 0.0f, 0.0f);
+            } else {
+                screen = runwaysScreen;
+                draw(screen);
+            }
 
     } else if (screen == gameStart) {
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -173,300 +174,30 @@ void Quad::draw(int screen) const {
         }
     }
 
-    else if (screen == gameScreen) {
+        else if (screen == gameScreen) {
 
-        string runwayUp = "RUNWAY 13";
-        string runwayLeft = "RUNWAY 9";
-        string runwayDown = "RUNWAY 31";
-        string runwayRight = "RUNWAY 27";
+            glColor3d(198/255.0, 192/255.0, 107/255.0);
 
-        if (getRunway() == 1) {
-
-            glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
-
-            glBegin(GL_QUADS);
+            glBegin(GL_LINE_LOOP);
             glVertex2f(100, 200);
             glVertex2f(450, 200);
             glVertex2f(450, 300);
             glVertex2f(100, 300);
             glEnd();
-
 //            x' = x*cos(t) - y*sin(t)
 //            y' = x*sin(t) + y*cos(t)
             double angle = 0.698132;
-            glBegin(GL_QUADS);
-            glVertex2f(500 - (100 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 300 * cos(angle)) + 115);
-            glVertex2f(500 - (100 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 300 * cos(angle)) + 115);
+            glColor3d(1, 0, 0);
+            glBegin(GL_LINE_LOOP);
+            glVertex2f(500 - (100 * cos(angle) - 200 * sin(angle)) - 178, 500 - (100 * sin(angle) + 200 * cos(angle)) + 115);
+            glVertex2f(500 - (450 * cos(angle) - 200 * sin(angle)) - 178, 500 - (450 * sin(angle) + 200 * cos(angle)) + 115);
+            glVertex2f(500 - (450 * cos(angle) - 300 * sin(angle)) - 178, 500 - (450 * sin(angle) + 300 * cos(angle)) + 115);
+            glVertex2f(500 - (100 * cos(angle) - 300 * sin(angle)) - 178, 500 - (100 * sin(angle) + 300 * cos(angle)) + 115);
             glEnd();
-
-            glColor3d(0, 0, 0);
-            glBegin(GL_LINES);
-            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)), 135);
-            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339, 135 + 48.2090707265);
-            glEnd();
-
-            glBegin(GL_TRIANGLE_STRIP);
-            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339 + 12.8557521937
-                     , 135 + 48.2090707265 - 15.3208888624);
-            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339 - 12.8557521937
-                    , 135 + 48.2090707265 + 15.3208888624);
-            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339 + 16.0696902422
-                    , 135 + 48.2090707265 + 19.151111078);
-            glEnd();
-
-            glColor3f(0, 1, 0);
-            glRasterPos2f(80, 100);
-            int lenUp = runwayUp.length();
-            int i;
-            for (i = 0; i < lenUp; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayUp[i]);
-            }
-            glColor3f(1, 0, 0);
-            glRasterPos2f(25, 240);
-            int lenLeft = runwayLeft.length();
-            for (i = 0; i < lenLeft; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayLeft[i]);
-            }
-            glColor3f(1, 0, 0);
-            glRasterPos2f(265, 400);
-            int lenDown = runwayDown.length();
-            for (i = 0; i < lenDown; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayDown[i]);
-            }
-            glColor3f(1, 0, 0);
-            glRasterPos2f(400, 180);
-            int lenRight = runwayRight.length();
-            for (i = 0; i < lenRight; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayRight[i]);
-            }
-
         }
-        else if (getRunway() == 2) {
 
-            glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
-
-            glBegin(GL_QUADS);
-            glVertex2f(100, 200);
-            glVertex2f(450, 200);
-            glVertex2f(450, 300);
-            glVertex2f(100, 300);
-            glEnd();
-
-//            x' = x*cos(t) - y*sin(t)
-//            y' = x*sin(t) + y*cos(t)
-            double angle = 0.698132;
-            glBegin(GL_QUADS);
-            glVertex2f(500 - (100 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 300 * cos(angle)) + 115);
-            glVertex2f(500 - (100 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 300 * cos(angle)) + 115);
-            glEnd();
-
-            glColor3d(0, 0, 0);
-            glBegin(GL_LINES);
-            glVertex2f(425, 250);
-            glVertex2f(350, 250);
-            glEnd();
-
-            glBegin(GL_TRIANGLE_STRIP);
-            glVertex2f(350, 230);
-            glVertex2f(350, 270);
-            glVertex2f(325, 250);
-            glEnd();
-
-            glColor3f(1, 0, 0);
-            glRasterPos2f(80, 100);
-            int lenUp = runwayUp.length();
-            int i;
-            for (i = 0; i < lenUp; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayUp[i]);
-            }
-            glColor3f(1, 0, 0);
-            glRasterPos2f(25, 240);
-            int lenLeft = runwayLeft.length();
-            for (i = 0; i < lenLeft; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayLeft[i]);
-            }
-            glColor3f(1, 0, 0);
-            glRasterPos2f(265, 400);
-            int lenDown = runwayDown.length();
-            for (i = 0; i < lenDown; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayDown[i]);
-            }
-            glColor3f(0, 1, 0);
-            glRasterPos2f(400, 180);
-            int lenRight = runwayRight.length();
-            for (i = 0; i < lenRight; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayRight[i]);
-            }
-        } else if (getRunway() == 3) {
-
-            glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
-
-            glBegin(GL_QUADS);
-            glVertex2f(100, 200);
-            glVertex2f(450, 200);
-            glVertex2f(450, 300);
-            glVertex2f(100, 300);
-            glEnd();
-
-//            x' = x*cos(t) - y*sin(t)
-//            y' = x*sin(t) + y*cos(t)
-            double angle = 0.698132;
-            glBegin(GL_QUADS);
-            glVertex2f(500 - (100 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 300 * cos(angle)) + 115);
-            glVertex2f(500 - (100 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 300 * cos(angle)) + 115);
-            glEnd();
-
-            glColor3d(0, 0, 0);
-            glBegin(GL_LINES);
-            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)), 342);
-            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339, 342 - 48.2090707265);
-            glEnd();
-
-            glBegin(GL_TRIANGLE_STRIP);
-            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339 + 12.8557521937
-                       ,342 - 48.2090707265 - 15.3208888624);
-            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339 - 12.8557521937
-                    ,342 - 48.2090707265 + 15.3208888624);
-            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339 - 16.0696902422
-                    ,342 - 48.2090707265 - 19.151111078);
-            glEnd();
-
-            glColor3f(1, 0, 0);
-            glRasterPos2f(80, 100);
-            int lenUp = runwayUp.length();
-            int i;
-            for (i = 0; i < lenUp; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayUp[i]);
-            }
-            glColor3f(1, 0, 0);
-            glRasterPos2f(25, 240);
-            int lenLeft = runwayLeft.length();
-            for (i = 0; i < lenLeft; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayLeft[i]);
-            }
-            glColor3f(0, 1, 0);
-            glRasterPos2f(265, 400);
-            int lenDown = runwayDown.length();
-            for (i = 0; i < lenDown; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayDown[i]);
-            }
-            glColor3f(1, 0, 0);
-            glRasterPos2f(400, 180);
-            int lenRight = runwayRight.length();
-            for (i = 0; i < lenRight; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayRight[i]);
-            }
-        } else if (getRunway() == 4) {
-
-            glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
-
-            glBegin(GL_QUADS);
-            glVertex2f(100, 200);
-            glVertex2f(450, 200);
-            glVertex2f(450, 300);
-            glVertex2f(100, 300);
-            glEnd();
-
-//            x' = x*cos(t) - y*sin(t)
-//            y' = x*sin(t) + y*cos(t)
-            double angle = 0.698132;
-            glBegin(GL_QUADS);
-            glVertex2f(500 - (100 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 300 * cos(angle)) + 115);
-            glVertex2f(500 - (100 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 300 * cos(angle)) + 115);
-            glEnd();
-
-            glColor3d(0, 0, 0);
-            glBegin(GL_LINES);
-            glVertex2f(125, 250);
-            glVertex2f(200, 250);
-            glEnd();
-
-            glBegin(GL_TRIANGLE_STRIP);
-            glVertex2f(200, 230);
-            glVertex2f(200, 270);
-            glVertex2f(230, 250);
-            glEnd();
-
-            glColor3f(1, 0, 0);
-            glRasterPos2f(80, 100);
-            int lenUp = runwayUp.length();
-            int i;
-            for (i = 0; i < lenUp; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayUp[i]);
-            }
-            glColor3f(0, 1, 0);
-            glRasterPos2f(25, 240);
-            int lenLeft = runwayLeft.length();
-            for (i = 0; i < lenLeft; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayLeft[i]);
-            }
-            glColor3f(1, 0, 0);
-            glRasterPos2f(265, 400);
-            int lenDown = runwayDown.length();
-            for (i = 0; i < lenDown; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayDown[i]);
-            }
-            glColor3f(1, 0, 0);
-            glRasterPos2f(400, 180);
-            int lenRight = runwayRight.length();
-            for (i = 0; i < lenRight; i++) {
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayRight[i]);
-            }
-        }
-    } else if (screen == gameEnd) {
-        srand(time(NULL));
-        double windDirection = rand() % 360 + 1;
-        //Random wind Speed
-        double windSpeed = rand() % 31;
-        //Create Runways
-        Runway r13("r13", windSpeed , windDirection, 130);
-        Runway r31("r31", windSpeed, windDirection, 310);
-        Runway r9("r9", windSpeed, windDirection, 90);
-        Runway r27("r27", windSpeed, windDirection, 270);
-
-        vector<Runway> runways;
-        runways.push_back(r13);
-        runways.push_back(r31);
-        runways.push_back(r9);
-        runways.push_back(r27);
-        double lowestVal = abs(r13.getDirectionDiff());
-        string correct;
-        for (Runway r : runways){
-            if(abs(r.getDirectionDiff()) < lowestVal){
-                lowestVal = r.getDirectionDiff();
-                correct = r.getName();
-                r.setLanding(true);
-            }
-        }
-    }
-
-
-    else if (screen == infoScreen) {
-        glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
+        if (screen == infoScreen) {
+            glColor3d(198/255.0, 192/255.0, 107/255.0);
 
         glBegin(GL_LINE_LOOP);
 
@@ -476,10 +207,8 @@ void Quad::draw(int screen) const {
             double x = points[i][0];
             double y = points[i][1];
 
-
+            }
 
         }
-
-
-    }
+        */
 }

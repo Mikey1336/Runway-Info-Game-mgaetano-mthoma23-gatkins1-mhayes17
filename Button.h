@@ -3,6 +3,7 @@
 
 #include "Quad.h"
 #include <string>
+using namespace std;
 
 class Button : public Quad {
 private:
@@ -25,6 +26,8 @@ public:
 
     /* Change the color back when the user is not clicking/hovering */
     void release();
+
+    string getLabel();
 };
 
 
