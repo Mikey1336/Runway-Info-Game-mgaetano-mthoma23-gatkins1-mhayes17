@@ -23,7 +23,7 @@ Button br9({.3, .3, .3}, {85, 250}, 100, 50, "r9");
 Button br27({.3, .3, .3}, {465, 250}, 100, 50, "r27");
 Button br31({.3, .3, .3}, {450, 380}, 100, 50, "r31");
 Button br13({.3, .3, .3}, {100, 100}, 100, 50, "r13");
-
+vector<vector<double>> points;
 enum screensEnum{
     startScreen,
     runwaysScreen,
@@ -37,7 +37,116 @@ enum screensEnum{
 
 screensEnum screen = startScreen;
 string ans = "default";
+string icao;
 
+
+vector<vector<double>> getRwyPoints() {
+
+    struct point2D {
+        double x;
+        double y;
+
+
+        /* Constructors */
+        point2D();
+
+        point2D(double x, double y);
+    };
+    cout << "Enter ICAO: ";
+    getline(cin, icao);
+    cout << icao << endl;
+
+    string command = "python ../api.py " + icao;
+    system(command.c_str());
+
+    // Create json file called AirportData.json
+    ifstream airportFile("../airportData.json", ifstream::binary);
+    Json::Reader reader;
+    Json::Value airport;
+    reader.parse(airportFile, airport);
+
+    // Create json file called metarData.json
+    ifstream weatherFile("../metarData.json", ifstream::binary);
+    Json::Reader weatherReader;
+    Json::Value weather;
+    weatherReader.parse(weatherFile, weather);
+
+    int windDirection = weather["wind_direction"]["value"].asInt();
+    int windSpeed = weather["wind_speed"]["value"].asInt();
+
+    cout << "Wind is " << windDirection << " at " << windSpeed << endl;
+
+    double latitude0 = stod(airport["runways"][0]["le_latitude_deg"].asString());
+    double longitude0 = stod(airport["runways"][0]["le_longitude_deg"].asString());
+
+    vector<vector<double>> rwyPoints;
+
+    for (int i = 0; i < airport["runways"].size(); i++) {
+        // Calculate the difference in angles between the plane's direction and the wind for strip 1
+        Json::Value currentRwy = airport["runways"][i];
+        string rwy1 = currentRwy["le_ident"].asString();
+        int rwyWidth = stoi(currentRwy["width_ft"].asString()) / 10;
+        int rwyLength = stoi(currentRwy["length_ft"].asString()) / 50;
+
+        if (rwy1.size() == 3) {
+            rwy1.resize(rwy1.size() - 1);
+        }
+        rwy1 += '0';
+        int rwyHeading = stoi(rwy1);
+
+//        cout << "Runway " << i + 1 << ": " << rwy1 << endl;
+//
+//        cout << "Points: ";
+
+        double originY = (stod(currentRwy["le_latitude_deg"].asString()) - latitude0) * 1000;
+        double originX = (stod(currentRwy["le_longitude_deg"].asString()) - longitude0) * 1000;
+
+        double p1x = originX - rwyWidth * cos(rwyHeading - 90);
+        double p1y = originY + rwyWidth * sin(rwyHeading - 90);
+        rwyPoints.push_back({p1x, p1y});
+
+        rwyPoints.push_back({originX, originY});
+//        double p2x = originX;
+//        double p2y = originY;
+
+        rwyPoints.push_back({originX - rwyLength * sin(rwyHeading - 90), originY + rwyLength * cos(rwyHeading - 90)});
+//        double p3x = originX - rwyLength * sin(rwyHeading - 90);
+//        double p3y = originY + rwyLength * cos(rwyHeading - 90);
+
+        rwyPoints.push_back({p1x - rwyLength * sin(rwyHeading - 90), p1y + rwyLength * cos(rwyHeading - 90)});
+//        double p4x = p1x - rwyLength * sin(rwyHeading - 90);
+//        double p4y = p1y + rwyLength * cos(rwyHeading - 90);
+
+//        cout << p1x << ", " << p1y << endl;
+//        cout << p2x << ", " << p2y << endl;
+//        cout << p3x << ", " << p3y << endl;
+//        cout << p4x << ", " << p4y << endl;
+//        cout << "Width: " << rwyWidth << endl;
+//        cout << "Length: " << rwyLength << endl << endl;
+    }
+
+    double lowestX = 0, lowestY = 0;
+    for (int i = 0; i < rwyPoints.size(); i++) {
+        lowestX = min(rwyPoints[i][0], lowestX);
+        lowestY = min(rwyPoints[i][1], lowestY);
+        //cout << rwyPoints[i][0] << ", " << rwyPoints[i][1] << endl;
+    }
+
+    for (int i = 0; i < rwyPoints.size(); i++) {
+        rwyPoints[i][0] -= lowestX;
+        rwyPoints[i][1] -= lowestY;
+        //cout << rwyPoints[i][0] << ", " << rwyPoints[i][1] << endl;
+    }
+
+    for (int i = 0; i < rwyPoints.size(); i++) {
+        if (i % 4 == 0) {
+            //cout << "Runway " << i / 4 + 1 << endl;
+        }
+        //cout << rwyPoints[i][0] << ", " << rwyPoints[i][1] << endl;
+    }
+
+    return rwyPoints;
+}
 //Function to run game
 string gameR(){
     //Random Seed
@@ -141,6 +250,7 @@ void initGL() {
 /* Handler for window-repaint event. Call back when the window first appears and
  whenever the window needs to be re-painted. */
 void display() {
+
     // tell OpenGL to use the whole window for drawing
     glViewport(0, 0, width, height);
     // do an orthographic parallel projection with the coordinate
@@ -267,9 +377,34 @@ void display() {
         //when info screen is clicked
         case infoScreen: {
 
-           cout << "nice" << endl;
+            if (points.size() == 0) {
+                points = getRwyPoints();
+            }
+            glColor3f(1, 0, 0);
+            for (int i = 0; i < points.size(); i++) {
+                double x = points[i][0];
+                double y = points[i][1];
+
+                if (i%4==0){
+                    glBegin(GL_QUADS);
+                }
+                glVertex2f(x + 125, y + 125);
+                if (i%4==3) {
+                    glEnd();
+                }
+            }
+            string runwayName = "DISPLAYING RUNWAYS AT " + icao;
+            glColor3f(0, 0, 1);
+            glRasterPos2f(185, 25);
+            int len = runwayName.length();
+            string lenString;
+            int i;
+            for (i = 0; i < len; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayName[i]);
+            }
+
             break;
-        }
+            }
 
         //when end screen is displayed
         case endScreen: {
@@ -317,10 +452,6 @@ void kbd(unsigned char key, int x, int y) {
         glutDestroyWindow(wd);
         exit(0);
     }
-
-    if (key == 10 && screen == gameScreen) {
-
-    }
     if (key == 115){
         screen = runwaysScreen;
     }
@@ -332,27 +463,27 @@ void kbdS(int key, int x, int y) {
 
     switch(key) {
 
-        case GLUT_KEY_RIGHT:
-            screen = gameScreen;
-            game.setRunway(2);
-            game.draw(screen);
-
-            break;
-        case GLUT_KEY_UP:
-            screen = gameScreen;
-            game.setRunway(1);
-            game.draw(screen);
-            break;
-        case GLUT_KEY_LEFT:
-            screen = gameScreen;
-            game.setRunway(4);
-            game.draw(screen);
-            break;
-        case GLUT_KEY_DOWN:
-            screen = gameScreen;
-            game.setRunway(3);
-            game.draw(screen);
-            break;
+//        case GLUT_KEY_RIGHT:
+//            screen = gameScreen;
+//            game.setRunway(2);
+//            game.draw(screen);
+//
+//            break;
+//        case GLUT_KEY_UP:
+//            screen = gameScreen;
+//            game.setRunway(1);
+//            game.draw(screen);
+//            break;
+//        case GLUT_KEY_LEFT:
+//            screen = gameScreen;
+//            game.setRunway(4);
+//            game.draw(screen);
+//            break;
+//        case GLUT_KEY_DOWN:
+//            screen = gameScreen;
+//            game.setRunway(3);
+//            game.draw(screen);
+//            break;
     }
 
 }
@@ -436,8 +567,9 @@ void mouse(int button, int state, int x, int y) {
     }
 
     if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && info.isOverlapping(x, y)) {
+        points.clear();
         screen = infoScreen;
-        info.draw(screen);
+
     }
 
     //Mouse Listeners for the game
@@ -527,124 +659,8 @@ void timer(int dummy) {
 }
 
 
-vector<vector<double>> getRwyPoints() {
-
-    struct point2D {
-        double x;
-        double y;
-
-
-        /* Constructors */
-        point2D();
-
-        point2D(double x, double y);
-    };
-//    string icao;
-//    cout << "Enter ICAO: ";
-//    getline(cin, icao);
-    string icao = "KBTV";
-    string command = "python ../api.py " + icao;
-    system(command.c_str());
-
-    // Create json file called AirportData.json
-    ifstream airportFile("../airportData.json", ifstream::binary);
-    Json::Reader reader;
-    Json::Value airport;
-    reader.parse(airportFile, airport);
-
-    // Create json file called metarData.json
-    ifstream weatherFile("../metarData.json", ifstream::binary);
-    Json::Reader weatherReader;
-    Json::Value weather;
-    weatherReader.parse(weatherFile, weather);
-
-    int windDirection = weather["wind_direction"]["value"].asInt();
-    int windSpeed = weather["wind_speed"]["value"].asInt();
-
-    cout << "Wind is " << windDirection << " at " << windSpeed << endl;
-
-    double latitude0 = stod(airport["runways"][0]["le_latitude_deg"].asString());
-    double longitude0 = stod(airport["runways"][0]["le_longitude_deg"].asString());
-
-    vector<vector<double>> rwyPoints;
-
-    for (int i = 0; i < airport["runways"].size(); i++) {
-        // Calculate the difference in angles between the plane's direction and the wind for strip 1
-        Json::Value currentRwy = airport["runways"][i];
-        string rwy1 = currentRwy["le_ident"].asString();
-        int rwyWidth = stoi(currentRwy["width_ft"].asString()) / 10;
-        int rwyLength = stoi(currentRwy["length_ft"].asString()) / 50;
-
-        if (rwy1.size() == 3) {
-            rwy1.resize(rwy1.size() - 1);
-        }
-        rwy1 += '0';
-        int rwyHeading = stoi(rwy1);
-
-        cout << "Runway " << i + 1 << ": " << rwy1 << endl;
-
-        cout << "Points: ";
-
-        double originY = (stod(currentRwy["le_latitude_deg"].asString()) - latitude0) * 1000;
-        double originX = (stod(currentRwy["le_longitude_deg"].asString()) - longitude0) * 1000;
-
-        double p1x = originX - rwyWidth * cos(rwyHeading - 90);
-        double p1y = originY + rwyWidth * sin(rwyHeading - 90);
-        rwyPoints.push_back({p1x, p1y});
-
-        rwyPoints.push_back({originX, originY});
-//        double p2x = originX;
-//        double p2y = originY;
-
-        rwyPoints.push_back({originX - rwyLength * sin(rwyHeading - 90), originY + rwyLength * cos(rwyHeading - 90)});
-//        double p3x = originX - rwyLength * sin(rwyHeading - 90);
-//        double p3y = originY + rwyLength * cos(rwyHeading - 90);
-
-        rwyPoints.push_back({p1x - rwyLength * sin(rwyHeading - 90), p1y + rwyLength * cos(rwyHeading - 90)});
-//        double p4x = p1x - rwyLength * sin(rwyHeading - 90);
-//        double p4y = p1y + rwyLength * cos(rwyHeading - 90);
-
-//        cout << p1x << ", " << p1y << endl;
-//        cout << p2x << ", " << p2y << endl;
-//        cout << p3x << ", " << p3y << endl;
-//        cout << p4x << ", " << p4y << endl;
-        cout << "Width: " << rwyWidth << endl;
-        cout << "Length: " << rwyLength << endl << endl;
-    }
-
-    double lowestX = 0, lowestY = 0;
-    for (int i = 0; i < rwyPoints.size(); i++) {
-        lowestX = min(rwyPoints[i][0], lowestX);
-        lowestY = min(rwyPoints[i][1], lowestY);
-        cout << rwyPoints[i][0] << ", " << rwyPoints[i][1] << endl;
-    }
-
-    for (int i = 0; i < rwyPoints.size(); i++) {
-        rwyPoints[i][0] -= lowestX;
-        rwyPoints[i][1] -= lowestY;
-        cout << rwyPoints[i][0] << ", " << rwyPoints[i][1] << endl;
-    }
-
-    for (int i = 0; i < rwyPoints.size(); i++) {
-        if (i % 4 == 0) {
-            cout << "Runway " << i / 4 + 1 << endl;
-        }
-        cout << rwyPoints[i][0] << ", " << rwyPoints[i][1] << endl;
-    }
-
-    return rwyPoints;
-}
-
 /* Main function: GLUT runs as a console application starting at main()  */
 int main(int argc, char** argv) {
-
-    vector<vector<double>> runways = getRwyPoints();
-    for (int i = 0; i < runways.size(); i++) {
-        for (int j = 0; j < runways.size(); j++){
-            cout << runways[i][j] << endl;
-        }
-    }
-
 
     init();
 

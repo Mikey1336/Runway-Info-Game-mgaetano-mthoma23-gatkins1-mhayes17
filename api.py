@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import requests
+import sys
 import json
 from sys import argv
 
@@ -9,7 +10,7 @@ def getAirportData():
     tokens = fileIn.read().split("\n")
     fileIn.close()
 
-    id = "KBTV"
+    id = sys.argv[1]
     # id = input("Enter airport icao: ")
     # id = id.strip().upper()[0:4]
 
