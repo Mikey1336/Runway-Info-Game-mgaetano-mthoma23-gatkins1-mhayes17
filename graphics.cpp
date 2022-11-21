@@ -38,10 +38,9 @@ string ans = "default";
 string icao;
 
 vector<vector<double>> getRwyPoints() {
-//    string icao;
-//    cout << "Enter ICAO: ";
-//    getline(cin, icao);
-    string icao = "KBOS";
+    cout << "Enter ICAO: ";
+    getline(cin, icao);
+    // string icao = "KBOS";
     string command = "python ../api.py " + icao;
     system(command.c_str());
 
@@ -411,12 +410,17 @@ void display() {
             glColor3f(0, 0, 1);
             glRasterPos2f(185, 25);
             int len = runwayName.length();
-            string lenString;
             int i;
             for (i = 0; i < len; i++) {
                 glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayName[i]);
             }
 
+            string backToMenu = "PRESS S TO RETURN TO THE MENU";
+            glRasterPos2f(185, 475);
+            int lenMenu = backToMenu.length();
+            for (i = 0; i < lenMenu; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, backToMenu[i]);
+            }
             break;
         }
 
