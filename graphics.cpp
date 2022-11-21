@@ -12,15 +12,25 @@ GLdouble width, height;
 int wd;
 
 //Buttons for runwaysScreen
-Button game({1, 0, 0}, {100, 100}, 100, 50, "Game");
-Button info({.133, .545, .133}, {400, 100}, 100, 50, "Runway Finder");
+Button game({1, 0, 0}, {150, 160}, 100, 50, "Game");
+Button info({.133, .545, .133}, {400, 160}, 100, 50, "Runway Finder");
 //Buttons for gameScreen
-Button play({.1, .6, .1}, {400, 100}, 100, 50, "Play!");
+Button play({.1, .6, .1}, {425, 75}, 100, 50, "Play!");
 Button br9({.3, .3, .3}, {85, 250}, 100, 50, "r9");
 Button br27({.3, .3, .3}, {465, 250}, 100, 50, "r27");
 Button br31({.3, .3, .3}, {450, 380}, 100, 50, "r31");
 Button br13({.3, .3, .3}, {100, 100}, 100, 50, "r13");
 
+enum screensEnum{
+    startScreen,
+    runwaysScreen,
+    endScreen,
+    gameScreen,
+    infoScreen,
+    prestoNoButton,
+    prestoButton,
+    gameStart,
+};
 
 screensEnum screen = startScreen;
 string ans = "default";
@@ -35,7 +45,8 @@ string gameR(){
     double windSpeed = rand() % 31;
     //Output start message
     cout << "*** Welcome to the Landing Game! ***" << endl;
-    cout << "** Based on the image above, choose the runway safest to land on! **" << endl;
+    cout << "** Choose the safest runway to land on at the airport! **" << endl;
+    cout << "Here are today's conditions:" << endl;
     //Out put wind stats
     cout << "Today's wind speed is: " << windSpeed << " mph" << endl;
     cout << "Today's wind is coming from: " << windDirection << " degrees" << endl;
@@ -81,11 +92,14 @@ string gameR(){
         (r27.getCrossWind() < 0) ? (cout << r27.getCrossWind() * -1 << " mph from left" << endl) : (cout
                 << r27.getCrossWind() << " mph from right" << endl);
     }
-    //DISPLAY direction diff between the way the wind is coming from and the direction the runway is facing
+
+    /*
+    display direction diff between the way the wind is coming from and the direction the runway is facing
     cout << "r13: " << r13.getDirectionDiff() << endl;
     cout << "r31: " << r31.getDirectionDiff() << endl;
     cout << "r9: " << r9.getDirectionDiff() << endl;
     cout << "r27: " << r27.getDirectionDiff() << endl;
+    */
     //Add runways to vector
     vector<Runway> runways;
     runways.push_back(r13);
@@ -103,7 +117,7 @@ string gameR(){
         }
     }
     //print select message
-    cout << "* Based on the information, select the runway that would be optimal for landing? *" << endl;
+    cout << "(Hint always land on the runway facing the closest to the direction that the wind is coming from)" << endl;
     //return correct ans
     return correct;
 }
@@ -140,6 +154,7 @@ void display() {
     switch(screen) {
         //when screen is start print message to enter program
         case startScreen: {
+            glClearColor(0.0f, 0.0f, 0.0f, 0.1f);
             glBindTexture(GL_TEXTURE_2D, 0);
             glColor3f(0, 0, 1);
             string displayString = "PRESS 's' TO ENTER RUNWAY EDUCATION PROGRAM";
@@ -155,6 +170,7 @@ void display() {
 
         //once in program and on runwaysScreen print buttons
         case runwaysScreen: {
+            glClearColor(0.0f, 0.0f, 0.0f, 0.1f);
             game.draw(screen);
             info.draw(screen);
             break;
@@ -163,8 +179,9 @@ void display() {
         //if game is clicked display game screen
         case gameScreen: {
             //draw first runway
+            glClearColor(0.0f, 0.0f, 0.3f, 0.1f);
             glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
-            glBegin(GL_LINE_LOOP);
+            glBegin(GL_QUADS);
             glVertex2f(100, 200);
             glVertex2f(450, 200);
             glVertex2f(450, 300);
@@ -172,8 +189,7 @@ void display() {
             glEnd();
             //draw second runway
             double angle = 0.698132;
-            glColor3d(1, 0, 0);
-            glBegin(GL_LINE_LOOP);
+            glBegin(GL_QUADS);
             glVertex2f(500 - (100 * cos(angle) - 200 * sin(angle)) - 178,
                        500 - (100 * sin(angle) + 200 * cos(angle)) + 115);
             glVertex2f(500 - (450 * cos(angle) - 200 * sin(angle)) - 178,
@@ -183,6 +199,59 @@ void display() {
             glVertex2f(500 - (100 * cos(angle) - 300 * sin(angle)) - 178,
                        500 - (100 * sin(angle) + 300 * cos(angle)) + 115);
             glEnd();
+
+            glColor3d(0, 0, 0);
+            glBegin(GL_LINES);
+            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)), 135);
+            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339, 135 + 48.2090707265);
+            glEnd();
+
+            glBegin(GL_TRIANGLE_STRIP);
+            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339 + 12.8557521937
+                    , 135 + 48.2090707265 - 15.3208888624);
+            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339 - 12.8557521937
+                    , 135 + 48.2090707265 + 15.3208888624);
+            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339 + 16.0696902422
+                    , 135 + 48.2090707265 + 19.151111078);
+            glEnd();
+
+            glBegin(GL_LINES);
+            glVertex2f(425, 250);
+            glVertex2f(350, 250);
+            glEnd();
+
+            glBegin(GL_TRIANGLE_STRIP);
+            glVertex2f(350, 230);
+            glVertex2f(350, 270);
+            glVertex2f(325, 250);
+            glEnd();
+
+            glBegin(GL_LINES);
+            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)), 342);
+            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339, 342 - 48.2090707265);
+            glEnd();
+
+            glBegin(GL_TRIANGLE_STRIP);
+            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339 + 12.8557521937
+                    ,342 - 48.2090707265 - 15.3208888624);
+            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339 - 12.8557521937
+                    ,342 - 48.2090707265 + 15.3208888624);
+            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339 - 16.0696902422
+                    ,342 - 48.2090707265 - 19.151111078);
+            glEnd();
+
+            glBegin(GL_LINES);
+            glVertex2f(125, 250);
+            glVertex2f(200, 250);
+            glEnd();
+
+            glBegin(GL_TRIANGLE_STRIP);
+            glVertex2f(200, 230);
+            glVertex2f(200, 270);
+            glVertex2f(230, 250);
+            glEnd();
+
+
             //draw buttons to select runway
             br9.draw(screen);
             br27.draw(screen);
@@ -214,6 +283,8 @@ void display() {
 
         //when end screen is displayed
         case endScreen: {
+            ans = "default";
+            glClearColor(0.0f, 0.0f, 0.0f, 0.1f);
             glBindTexture(GL_TEXTURE_2D, 0);
             glColor3f(0, 0, 1);
             string displayString = "YOU HAVE COMPLETED THE GAME. CONGRATULATIONS";
@@ -223,6 +294,16 @@ void display() {
             int i;
             for (i = 0; i < len; i++) {
                 glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString[i]);
+            }
+            string displayString2 = "PRESS 's' TO RETURN TO MENU";
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glColor3f(0, 0, 1);
+            glRasterPos2f(150, 200);
+            int len2 = displayString2.length();
+            string lenString2;
+            int m;
+            for (m = 0; m < len2; m++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString2[m]);
             }
             break;
         }
@@ -369,58 +450,78 @@ void mouse(int button, int state, int x, int y) {
 
     //Mouse Listeners for the game
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && play.isOverlapping(x, y)) {
-        info.pressDown();
+        play.pressDown();
     } else {
-        info.release();
+        play.release();
     }
 
     //ONCE PLAY BUTTON HAS BEEN CLICKED RUN GAME FUNCTION
     if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && play.isOverlapping(x, y)) {
         screen = gameScreen;
         ans = gameR();
-        cout << ans << endl;
+        //cout << ans << endl;
     }
     //Listeners for runway buttons
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && br9.isOverlapping(x, y)) {
-        info.pressDown();
+        game.pressDown();
     } else {
-        info.release();
+        game.release();
     }
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && br27.isOverlapping(x, y)) {
-        info.pressDown();
+        game.pressDown();
     } else {
-        info.release();
+        game.release();
     }
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && br13.isOverlapping(x, y)) {
-        info.pressDown();
+        game.pressDown();
     } else {
-        info.release();
+        game.release();
     }
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && br31.isOverlapping(x, y)) {
-        info.pressDown();
+        game.pressDown();
     } else {
-        info.release();
+        game.release();
     }
     //if the correct button is clicked print winner and go to end screen
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && br9.isOverlapping(x,y) && ans == br9.getLabel()){
-        cout << ans << endl;
-        cout << "winner" << endl;
-        screen = endScreen;
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && br9.isOverlapping(x,y)){
+        if(ans == br9.getLabel()) {
+            cout << "Correct!" << endl;
+            screen = endScreen;
+        } else if(ans == "default"){
+            cout << "Hit Play!" << endl;
+        } else {
+            cout << "Try again!" << endl;
+        }
     }
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && br27.isOverlapping(x,y) && ans == br27.getLabel()){
-        cout << ans << endl;
-        cout << "winner" << endl;
-        screen = endScreen;
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && br27.isOverlapping(x,y)){
+        if (ans == br27.getLabel()) {
+            cout << "Correct!" << endl;
+            screen = endScreen;
+        } else if(ans == "default"){
+            cout << "Hit Play!" << endl;
+        } else {
+            cout << "Try again!" << endl;
+        }
     }
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && br13.isOverlapping(x,y) && ans == br13.getLabel()){
-        cout << ans << endl;
-        cout << "winner" << endl;
-        screen = endScreen;
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && br13.isOverlapping(x,y) && screen == gameScreen){
+        if (ans == br13.getLabel()) {
+            cout << "Correct!" << endl;
+            screen = endScreen;
+        } else if(ans == "default"){
+            cout << "Hit Play!" << endl;
+        } else {
+            cout << "Try again!" << endl;
+        }
     }
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && br31.isOverlapping(x,y) && ans == br31.getLabel()){
-        cout << ans << endl;
-        cout << "winner" << endl;
-        screen = endScreen;
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && br31.isOverlapping(x,y)){
+        if (ans == br31.getLabel()) {
+            cout << "Correct!" << endl;
+            screen = endScreen;
+        } else if(ans == "default"){
+            cout << "Hit Play!" << endl;
+        } else {
+            cout << "Try again!" << endl;
+        }
     }
 
     glutPostRedisplay();
