@@ -21,7 +21,7 @@ Button br9({.3, .3, .3}, {85, 250}, 100, 50, "r9");
 Button br27({.3, .3, .3}, {465, 250}, 100, 50, "r27");
 Button br31({.3, .3, .3}, {450, 380}, 100, 50, "r31");
 Button br13({.3, .3, .3}, {100, 100}, 100, 50, "r13");
-
+vector<vector<double>> points;
 enum screensEnum{
     startScreen,
     runwaysScreen,
@@ -35,6 +35,7 @@ enum screensEnum{
 
 screensEnum screen = startScreen;
 string ans = "default";
+string icao;
 
 vector<vector<double>> getRwyPoints() {
 //    string icao;
@@ -389,21 +390,33 @@ void display() {
 
         //when info screen is clicked
         case infoScreen: {
-            glColor3d(198/255.0, 192/255.0, 107/255.0);
 
-            vector<vector<double>> points;
-            points = getRwyPoints();
-
-            glBegin(GL_QUADS);
-
+            if (points.size() == 0) {
+                points = getRwyPoints();
+            }
+            glColor3f(1, 0, 0);
             for (int i = 0; i < points.size(); i++) {
                 double x = points[i][0];
                 double y = points[i][1];
 
-                glVertex2f(x, y);
+                if (i%4==0){
+                    glBegin(GL_QUADS);
+                }
+                glVertex2f(x + 125, y + 125);
+                if (i%4==3) {
+                    glEnd();
+                }
+            }
+            string runwayName = "DISPLAYING RUNWAYS AT " + icao;
+            glColor3f(0, 0, 1);
+            glRasterPos2f(185, 25);
+            int len = runwayName.length();
+            string lenString;
+            int i;
+            for (i = 0; i < len; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, runwayName[i]);
             }
 
-            glEnd();
             break;
         }
 
@@ -453,10 +466,6 @@ void kbd(unsigned char key, int x, int y) {
         glutDestroyWindow(wd);
         exit(0);
     }
-
-    if (key == 10 && screen == gameScreen) {
-
-    }
     if (key == 115){
         screen = runwaysScreen;
     }
@@ -468,26 +477,27 @@ void kbdS(int key, int x, int y) {
 
     switch(key) {
 
-        case GLUT_KEY_RIGHT:
-            screen = gameScreen;
-            game.setRunway(2);
-            game.draw(screen);
-            break;
-        case GLUT_KEY_UP:
-            screen = gameScreen;
-            game.setRunway(1);
-            game.draw(screen);
-            break;
-        case GLUT_KEY_LEFT:
-            screen = gameScreen;
-            game.setRunway(4);
-            game.draw(screen);
-            break;
-        case GLUT_KEY_DOWN:
-            screen = gameScreen;
-            game.setRunway(3);
-            game.draw(screen);
-            break;
+//        case GLUT_KEY_RIGHT:
+//            screen = gameScreen;
+//            game.setRunway(2);
+//            game.draw(screen);
+//
+//            break;
+//        case GLUT_KEY_UP:
+//            screen = gameScreen;
+//            game.setRunway(1);
+//            game.draw(screen);
+//            break;
+//        case GLUT_KEY_LEFT:
+//            screen = gameScreen;
+//            game.setRunway(4);
+//            game.draw(screen);
+//            break;
+//        case GLUT_KEY_DOWN:
+//            screen = gameScreen;
+//            game.setRunway(3);
+//            game.draw(screen);
+//            break;
     }
 
 }
@@ -571,7 +581,9 @@ void mouse(int button, int state, int x, int y) {
     }
 
     if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && info.isOverlapping(x, y)) {
+        points.clear();
         screen = infoScreen;
+
     }
 
     //Mouse Listeners for the game
