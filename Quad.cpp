@@ -1,5 +1,6 @@
 #include "Quad.h"
 #include "graphics.h"
+#include "runway.h"
 #include <string>
 #include <iostream>
 #include <cmath>
@@ -104,83 +105,80 @@ int Quad::getRunway() const {
 }
 
 void Quad::draw(int screen) const {
-    //if enum == start screen, display start screen
-    if (screen == startScreen) {
-        glBindTexture(GL_TEXTURE_2D, 0);
-        glColor3f(0, 0, 1);
-        string displayString = "PRESS 's' TO ENTER RUNWAY EDUCATION PROGRAM";
-        glRasterPos2f(130, 100);
-        int len = displayString.length();
-        string lenString;
-        int i;
+    // Don't forget to set the color to the fill field
+    // Set drawing color to fill color
+    glColor3f(fill.red, fill.green, fill.blue);
+    // Draw building as quad
+    glBegin(GL_QUADS);
 
-        for (i = 0; i < len; i++) {
-            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString[i]);
-        }
-        //if enum == runways screen, display runways screen
-    } else if (screen == runwaysScreen) {
-        // Don't forget to set the color to the fill field
-        // Set drawing color to fill color
-        glColor3f(fill.red, fill.green, fill.blue);
-        // Draw rectangle
-        glBegin(GL_QUADS);
-        // Draw center point
-        glVertex2i(getLeftX(), getTopY());
-        glVertex2i(getLeftX(), getBottomY());
-        glVertex2i(getRightX(), getBottomY());
-        glVertex2i(getRightX(), getTopY());
-        // End quad
-        glEnd();
+    // Draw points of vertices
+    glVertex2i(center.x- (width/2), center.y - (height/2));
+    glVertex2i(center.x + (width/2), center.y - (height/2));
+    glVertex2i(center.x + (width/2), center.y + (height/2));
+    glVertex2i(center.x - (width/2), center.y + (height/2));
+
+    // End Quad
+    glEnd();
+    /*
+        if (screen == runwaysScreen) {
+            // Don't forget to set the color to the fill field
+            // Set drawing color to fill color
+            glColor3f(fill.red, fill.green, fill.blue);
+            // Draw rectangle
+            glBegin(GL_QUADS);
+            // Draw center point
+            glVertex2i(getLeftX(), getTopY());
+            glVertex2i(getLeftX(), getBottomY());
+            glVertex2i(getRightX(), getBottomY());
+            glVertex2i(getRightX(), getTopY());
+            // End quad
+            glEnd();
         //if enum == end screen, display end screen
-    } else if (screen == endScreen) {
-        glBindTexture(GL_TEXTURE_2D, 0);
-        glColor3f(0, 0, 1);
-        string displayString = "YOU HAVE COMPLETED THE GAME. CONGRATULATIONS";
-        glRasterPos2f(90, 100);
-        int len = displayString.length();
-        string lenString;
-        int i;
-        for (i = 0; i < len; i++) {
-            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString[i]);
-        }
-        //if enum == presto no button, remove the button
-        //if enum == presto button, set enum to confettify screen and draw again.
-    } else if (screen == prestoNoButton || screen == prestoButton) {
-        if (screen == prestoNoButton) {
-            glColor3f(0.0f, 0.0f, 0.0f);
-        } else {
-            screen = runwaysScreen;
-            draw(screen);
-        }
+        } else if (screen == endScreen) {
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glColor3f(0, 0, 1);
+            string displayString = "YOU HAVE COMPLETED THE GAME. CONGRATULATIONS";
+            glRasterPos2f(90, 100);
+            int len = displayString.length();
+            string lenString;
+            int i;
+            for (i = 0; i < len; i++) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString[i]);
+            }
+            //if enum == presto no button, remove the button
+            //if enum == presto button, set enum to confettify screen and draw again.
+        } else if (screen == prestoNoButton || screen == prestoButton) {
+            if (screen == prestoNoButton) {
+                glColor3f(0.0f, 0.0f, 0.0f);
+            } else {
+                screen = runwaysScreen;
+                draw(screen);
+            }
 
     } else if (screen == gameStart) {
         glBindTexture(GL_TEXTURE_2D, 0);
         glColor3f(0, 0, 1);
         string displayString1 = "WIND IS COMING FROM SOME DIRECTION AT SOME SPEED";
         string displayString2 = "USE THE ARROW KEYS TO CHOOSE THE CORRECT RUNWAY TO LAND ON";
-        glRasterPos2f(90, 100);
+        glRasterPos2f(80, 100);
         int len1 = displayString1.length();
-        string lenString1;
         int i;
         for (i = 0; i < len1; i++) {
             glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString1[i]);
         }
 
-        glRasterPos2f(90, 120);
-        int len2 = displayString1.length();
-        string lenString2;
-        for (i = 0; i < len1; i++) {
+        glRasterPos2f(40, 120);
+        int len2 = displayString2.length();
+        for (i = 0; i < len2; i++) {
             glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, displayString2[i]);
         }
     }
 
-    else if (screen == gameScreen) {
+        else if (screen == gameScreen) {
 
-        if (getRunway() == 1) {
+            glColor3d(198/255.0, 192/255.0, 107/255.0);
 
-            glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
-
-            glBegin(GL_QUADS);
+            glBegin(GL_LINE_LOOP);
             glVertex2f(100, 200);
             glVertex2f(450, 200);
             glVertex2f(450, 300);
@@ -190,161 +188,30 @@ void Quad::draw(int screen) const {
 //            x' = x*cos(t) - y*sin(t)
 //            y' = x*sin(t) + y*cos(t)
             double angle = 0.698132;
-            glBegin(GL_QUADS);
-            glVertex2f(500 - (100 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 300 * cos(angle)) + 115);
-            glVertex2f(500 - (100 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 300 * cos(angle)) + 115);
-            glEnd();
-
-            glColor3d(0, 0, 0);
-            glBegin(GL_LINES);
-            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)), 135);
-            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339, 135 + 48.2090707265);
-            glEnd();
-
-            glBegin(GL_TRIANGLE_STRIP);
-            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339 + 12.8557521937
-                     , 135 + 48.2090707265 - 15.3208888624);
-            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339 - 12.8557521937
-                    , 135 + 48.2090707265 + 15.3208888624);
-            glVertex2f(100 - (100 * cos(angle) - 200 * sin(angle)) + 57.4533332339 + 16.0696902422
-                    , 135 + 48.2090707265 + 19.151111078);
+            glColor3d(1, 0, 0);
+            glBegin(GL_LINE_LOOP);
+            glVertex2f(500 - (100 * cos(angle) - 200 * sin(angle)) - 178, 500 - (100 * sin(angle) + 200 * cos(angle)) + 115);
+            glVertex2f(500 - (450 * cos(angle) - 200 * sin(angle)) - 178, 500 - (450 * sin(angle) + 200 * cos(angle)) + 115);
+            glVertex2f(500 - (450 * cos(angle) - 300 * sin(angle)) - 178, 500 - (450 * sin(angle) + 300 * cos(angle)) + 115);
+            glVertex2f(500 - (100 * cos(angle) - 300 * sin(angle)) - 178, 500 - (100 * sin(angle) + 300 * cos(angle)) + 115);
             glEnd();
         }
-        else if (getRunway() == 2) {
-
-            glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
-
-            glBegin(GL_QUADS);
-            glVertex2f(100, 200);
-            glVertex2f(450, 200);
-            glVertex2f(450, 300);
-            glVertex2f(100, 300);
-            glEnd();
-
-//            x' = x*cos(t) - y*sin(t)
-//            y' = x*sin(t) + y*cos(t)
-            double angle = 0.698132;
-            glBegin(GL_QUADS);
-            glVertex2f(500 - (100 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 300 * cos(angle)) + 115);
-            glVertex2f(500 - (100 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 300 * cos(angle)) + 115);
-            glEnd();
-
-            glColor3d(0, 0, 0);
-            glBegin(GL_LINES);
-            glVertex2f(425, 250);
-            glVertex2f(350, 250);
-            glEnd();
-
-            glBegin(GL_TRIANGLE_STRIP);
-            glVertex2f(350, 230);
-            glVertex2f(350, 270);
-            glVertex2f(325, 250);
-            glEnd();
-        } else if (getRunway() == 3) {
-
-            glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
-
-            glBegin(GL_QUADS);
-            glVertex2f(100, 200);
-            glVertex2f(450, 200);
-            glVertex2f(450, 300);
-            glVertex2f(100, 300);
-            glEnd();
-
-//            x' = x*cos(t) - y*sin(t)
-//            y' = x*sin(t) + y*cos(t)
-            double angle = 0.698132;
-            glBegin(GL_QUADS);
-            glVertex2f(500 - (100 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 300 * cos(angle)) + 115);
-            glVertex2f(500 - (100 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 300 * cos(angle)) + 115);
-            glEnd();
-
-            glColor3d(0, 0, 0);
-            glBegin(GL_LINES);
-            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)), 342);
-            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339, 342 - 48.2090707265);
-            glEnd();
-
-            glBegin(GL_TRIANGLE_STRIP);
-            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339 + 12.8557521937
-                       ,342 - 48.2090707265 - 15.3208888624);
-            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339 - 12.8557521937
-                    ,342 - 48.2090707265 + 15.3208888624);
-            glVertex2f(340 - (100 * cos(angle) - 200 * sin(angle)) - 57.4533332339 - 16.0696902422
-                    ,342 - 48.2090707265 - 19.151111078);
-            glEnd();
-        }
-
-        else if (getRunway() == 4) {
-
-            glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
-
-            glBegin(GL_QUADS);
-            glVertex2f(100, 200);
-            glVertex2f(450, 200);
-            glVertex2f(450, 300);
-            glVertex2f(100, 300);
-            glEnd();
-
-//            x' = x*cos(t) - y*sin(t)
-//            y' = x*sin(t) + y*cos(t)
-            double angle = 0.698132;
-            glBegin(GL_QUADS);
-            glVertex2f(500 - (100 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 200 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 200 * cos(angle)) + 115);
-            glVertex2f(500 - (450 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (450 * sin(angle) + 300 * cos(angle)) + 115);
-            glVertex2f(500 - (100 * cos(angle) - 300 * sin(angle)) - 178,
-                       500 - (100 * sin(angle) + 300 * cos(angle)) + 115);
-            glEnd();
-
-            glColor3d(0, 0, 0);
-            glBegin(GL_LINES);
-            glVertex2f(125, 250);
-            glVertex2f(200, 250);
-            glEnd();
-
-            glBegin(GL_TRIANGLE_STRIP);
-            glVertex2f(200, 230);
-            glVertex2f(200, 270);
-            glVertex2f(230, 250);
-            glEnd();
-        }
-    } else if (screen == infoScreen) {
-        glColor3d(198 / 255.0, 192 / 255.0, 107 / 255.0);
-
-        vector<vector<double>> points;
-        points = getRwyPoints();
-
-        glBegin(GL_QUADS);
-
-        for (int i = 0; i < points.size(); i++) {
-            double x = points[i][0];
-            double y = points[i][1];
-
-            glVertex2f(x, y);
-        }
-
-        glEnd();
+*/
+        if (screen == infoScreen) {
+//            glColor3d(198/255.0, 192/255.0, 107/255.0);
+//
+//        vector<vector<double>> points;
+//        points = getRwyPoints();
+//
+//        glBegin(GL_QUADS);
+//
+//        for (int i = 0; i < points.size(); i++) {
+//            double x = points[i][0];
+//            double y = points[i][1];
+//
+//            glVertex2f(x, y);
+//        }
+//
+//        glEnd();
     }
 }

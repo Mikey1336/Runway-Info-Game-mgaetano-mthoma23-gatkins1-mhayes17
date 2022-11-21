@@ -12,17 +12,6 @@ struct point {
     int y;
 };
 
-//enum for switching through screens
-enum screensEnum{
-    startScreen,
-    runwaysScreen,
-    endScreen,
-    gameScreen,
-    gameStart,
-    infoScreen,
-    prestoNoButton,
-    prestoButton,
-};
 
 class Quad {
 protected:

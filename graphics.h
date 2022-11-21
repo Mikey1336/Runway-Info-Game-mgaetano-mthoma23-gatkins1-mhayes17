@@ -14,6 +14,17 @@
 #include <GL/glut.h>
 #endif
 
+enum screensEnum{
+    startScreen,
+    runwaysScreen,
+    endScreen,
+    gameScreen,
+    infoScreen,
+    prestoNoButton,
+    prestoButton,
+    gameStart,
+};
+
 void spawnConfetti();
 
 // Program initialization NOT OpenGL/GLUT dependent,

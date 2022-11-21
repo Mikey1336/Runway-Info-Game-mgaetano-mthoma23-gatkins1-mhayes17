@@ -69,7 +69,7 @@ vector<vector<double>> getRwyPoints() {
         cout << "Points: ";
 
         double originY = (stod(currentRwy["le_latitude_deg"].asString())) * 3000;
-        double originX = (stod(currentRwy["le_longitude_deg"].asString())) * 3000;
+        double originX = (stod(currentRwy["le_longitude_deg"].asString())) * -3000;
         rwyPoints.push_back({originX, originY});
 
         double x, y;

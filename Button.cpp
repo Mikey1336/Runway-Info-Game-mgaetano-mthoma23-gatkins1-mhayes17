@@ -45,3 +45,7 @@ void Button::pressDown() {
 void Button::release() {
     setColor(originalFill);
 }
+
+string Button::getLabel() {
+    return label;
+}
