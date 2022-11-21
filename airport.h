@@ -24,7 +24,7 @@ vector<vector<double>> getRwyPoints() {
 //    string icao;
 //    cout << "Enter ICAO: ";
 //    getline(cin, icao);
-    string icao = "KBTV";
+    string icao = "KBOS";
     string command = "python ../api.py " + icao;
     system(command.c_str());
 
@@ -55,7 +55,7 @@ vector<vector<double>> getRwyPoints() {
         // Calculate the difference in angles between the plane's direction and the wind for strip 1
         Json::Value currentRwy = airport["runways"][i];
         string rwy1 = currentRwy["le_ident"].asString();
-        int rwyWidth = stoi(currentRwy["width_ft"].asString()) / 10;
+        int rwyWidth = stoi(currentRwy["width_ft"].asString()) / 40;
         int rwyLength = stoi(currentRwy["length_ft"].asString()) / 40;
 
         if (rwy1.size() == 3) {
@@ -68,14 +68,14 @@ vector<vector<double>> getRwyPoints() {
 
         cout << "Points: ";
 
-        double originY = (stod(currentRwy["le_latitude_deg"].asString())) * 3000;
-        double originX = (stod(currentRwy["le_longitude_deg"].asString())) * -3000;
+        double originY = (stod(currentRwy["le_latitude_deg"].asString())) * 1000;
+        double originX = (stod(currentRwy["le_longitude_deg"].asString())) * 1000;
         rwyPoints.push_back({originX, originY});
 
         double x, y;
         double degToRad = M_PI / 180;
 
-        if (rwyHeading / 90 % 2 == 0) {
+        if (rwyHeading / 90 == 0) {
             x = originX + rwyWidth * cos((rwyHeading % 90) * degToRad);
             y = originY + rwyWidth * sin((rwyHeading % 90) * degToRad);
             rwyPoints.push_back({x, y});
@@ -125,16 +125,14 @@ vector<vector<double>> getRwyPoints() {
     }
 
     double lowestX = rwyPoints[0][0], lowestY = rwyPoints[0][1];
-    for (int i = 0; i < rwyPoints.size(); i++) {
+    for (int i = 1; i < rwyPoints.size(); i++) {
         lowestX = min(rwyPoints[i][0], lowestX);
         lowestY = min(rwyPoints[i][1], lowestY);
-        cout << rwyPoints[i][0] << ", " << rwyPoints[i][1] << endl;
     }
 
     for (int i = 0; i < rwyPoints.size(); i++) {
-        rwyPoints[i][0] -= lowestX;
-        rwyPoints[i][1] -= lowestY;
-        cout << rwyPoints[i][0] << ", " << rwyPoints[i][1] << endl;
+        rwyPoints[i][0] = (rwyPoints[i][0] - lowestX);
+        rwyPoints[i][1] = (rwyPoints[i][1] - lowestY);
     }
 
     for (int i = 0; i < rwyPoints.size(); i++) {

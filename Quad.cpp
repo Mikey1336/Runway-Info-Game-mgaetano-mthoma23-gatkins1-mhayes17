@@ -4,7 +4,6 @@
 #include <string>
 #include <iostream>
 #include <cmath>
-#include "airport.h"
 #include <vector>
 
 
@@ -197,7 +196,7 @@ void Quad::draw(int screen) const {
             glEnd();
         }
 */
-        if (screen == infoScreen) {
+//        if (screen == infoScreen) {
 //            glColor3d(198/255.0, 192/255.0, 107/255.0);
 //
 //        vector<vector<double>> points;
@@ -213,5 +212,5 @@ void Quad::draw(int screen) const {
 //        }
 //
 //        glEnd();
-    }
+//    }
 }
