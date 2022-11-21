@@ -38,5 +38,4 @@ Mouse listener for game screen (10 pts)\
 Quad class (10 pts)\
 Button class (10 pts)\
 Runway class (10 pts)\
-Airport class (10 pts)\
-~110 pts
+~100 pts
